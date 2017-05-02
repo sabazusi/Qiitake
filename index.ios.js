@@ -16,10 +16,13 @@ import Search from './src/components/views/search';
 import Favorite from './src/components/views/favorite';
 import Settings from './src/components/views/settings';
 
+import ApiClient from './src/api/client';
+
 export default class Qiitake extends React.Component {
 
   constructor() {
     super();
+    this.apiClient = new ApiClient();
     this.state = {
       current: 'trend'
     };
@@ -36,13 +39,16 @@ export default class Qiitake extends React.Component {
         tintColor="white"
         unselectedItemTintColor="red"
         barTintColor="darkslateblue"
+        style={styles.container}
       >
         <TabBarIOS.Item
           title="trend"
           selected={current === 'trend'}
           onPress={() => this.setState({current: 'trend'})}
         >
-          <Trend />
+          <Trend
+            apiClient={this.apiClient}
+          />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="search"
@@ -72,21 +78,8 @@ export default class Qiitake extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    marginTop: 20
+  }
 });
 
 AppRegistry.registerComponent('Qiitake', () => Qiitake);
