@@ -4,27 +4,32 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
   TabBarIOS,
   AppRegistry,
-  StyleSheet,
-  Text,
-  View
+  StyleSheet
 } from 'react-native';
 
-class DummyView extends React.Component {
-  render() {
-    return (
-      <View>
-        <Text>a</Text>
-      </View>
-    );
-  }
-}
+import Trend from './src/components/views/trend';
+import Search from './src/components/views/search';
+import Favorite from './src/components/views/favorite';
+import Settings from './src/components/views/settings';
 
-export default class Qiitake extends Component {
+export default class Qiitake extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      current: 'trend'
+    };
+  }
+
   render() {
+    const {
+      current
+    } = this.state;
+
     return (
       <TabBarIOS
         unselectedTintColor="yellow"
@@ -34,24 +39,31 @@ export default class Qiitake extends Component {
       >
         <TabBarIOS.Item
           title="trend"
-          selected
+          selected={current === 'trend'}
+          onPress={() => this.setState({current: 'trend'})}
         >
-          <DummyView />
+          <Trend />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="search"
+          selected={current === 'search'}
+          onPress={() => this.setState({current: 'search'})}
         >
-          <DummyView />
+          <Search />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="favorite"
+          selected={current === 'favorite'}
+          onPress={() => this.setState({current: 'favorite'})}
         >
-          <DummyView />
+          <Favorite />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="settings"
+          selected={current === 'settings'}
+          onPress={() => this.setState({current: 'settings'})}
         >
-          <DummyView />
+          <Settings />
         </TabBarIOS.Item>
       </TabBarIOS>
     );
