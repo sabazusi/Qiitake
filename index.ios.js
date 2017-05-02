@@ -6,27 +6,54 @@
 
 import React, { Component } from 'react';
 import {
+  TabBarIOS,
   AppRegistry,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 
+class DummyView extends React.Component {
+  render() {
+    return (
+      <View>
+        <Text>a</Text>
+      </View>
+    );
+  }
+}
+
 export default class Qiitake extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <TabBarIOS
+        unselectedTintColor="yellow"
+        tintColor="white"
+        unselectedItemTintColor="red"
+        barTintColor="darkslateblue"
+      >
+        <TabBarIOS.Item
+          title="trend"
+          selected
+        >
+          <DummyView />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="search"
+        >
+          <DummyView />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="favorite"
+        >
+          <DummyView />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="settings"
+        >
+          <DummyView />
+        </TabBarIOS.Item>
+      </TabBarIOS>
     );
   }
 }
