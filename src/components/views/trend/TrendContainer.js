@@ -48,6 +48,9 @@ export default class TrendList extends React.Component<void, Props, State> {
           this.props.navigator.push({
             title: data,
             component: Post,
+            passProps: {
+              apiClient: this.props.apiClient
+            }
           })
         }}
       >

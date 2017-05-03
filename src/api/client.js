@@ -19,11 +19,23 @@ export default class ApiClient {
   getPostMock() {
     return new Promise((resolve) => {
       setTimeout(() => {
+        fetch('https://qiita.com/api/v2/items/27929395e3133b514516')
+          .then((res) => resolve(res.json()));
+        /**
+        Qiita.setEndpoint('https://qiita.com');
+        Qiita.Resources.Item.get_item('27929395e3133b514516')
+          .then((res) => console.log(res))
+          */
+        /**
         resolve({
           title: 'Getting started for React-Native',
           content: 'Hello React Native'
         });
-      }, 2000);
+        */
+      }, 500);
     });
+  }
+
+  getPostListByKeyword(keyword: string) {
   }
 }

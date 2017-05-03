@@ -1,14 +1,32 @@
 import React from 'react';
 import {
-  Text,
-  View
+  View,
+  WebView
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class PostItem extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      uri: ''
+    };
+  }
+
+  componentDidMount() {
+    this.props.apiClient.getPostMock()
+      .then((post) => this.setState({uri: post.url}));
+  }
+
   render() {
-    return (
+    const {
+      uri
+    } = this.state;
+    return uri ? (
+      <WebView source={{uri: uri.replace(/^(http:\/\/)/, 'https://')}} />
+    ) : (
       <View>
-        <Text>はい</Text>
+        <Spinner visible={uri === ''} />
       </View>
     );
   }
