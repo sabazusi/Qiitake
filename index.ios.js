@@ -24,8 +24,12 @@ export default class Qiitake extends React.Component {
     super();
     this.apiClient = new ApiClient();
     this.state = {
-      current: 'trend'
+      current: 'trend',
+      isOpenLoginModal: false
     };
+  }
+
+  onUpdateLoginStatus = () => {
   }
 
   render() {
@@ -69,7 +73,10 @@ export default class Qiitake extends React.Component {
           selected={current === 'settings'}
           onPress={() => this.setState({current: 'settings'})}
         >
-          <Settings />
+          <Settings
+            apiClient={this.apiClient}
+            onUpdateLoginStatus={this.onUpdateLoginStatus}
+          />
         </TabBarIOS.Item>
       </TabBarIOS>
     );
