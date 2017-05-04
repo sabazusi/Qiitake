@@ -8,6 +8,7 @@ import React from 'react';
 import {
   TabBarIOS,
   AppRegistry,
+  AsyncStorage,
   StyleSheet
 } from 'react-native';
 
@@ -18,11 +19,13 @@ import Settings from './src/components/views/settings';
 
 import ApiClient from './src/api/client';
 
+const ACCESS_TOKEN_KEY = '@Qiitake:user:token';
+
 export default class Qiitake extends React.Component {
 
   constructor() {
     super();
-    this.apiClient = new ApiClient();
+
     this.state = {
       current: 'settings',
       isOpenLoginModal: false,
@@ -30,9 +33,26 @@ export default class Qiitake extends React.Component {
     };
   }
 
+
+  componentDidMount() {
+    const accessToken = AsyncStorage.getItem(ACCESS_TOKEN_KEY, (error, result) => {
+      if (!error) {
+        this.apiClient = new ApiClient(result || '');
+      } else {
+        this.apiClient = new ApiClient();
+      }
+      this.apiClient.getMyself()
+        .then((res) => this.setState({ user: res }))
+        .catch(() => {});
+    });
+  }
+
   onUpdateLoginStatus = () => {
     this.apiClient.getMyself()
-      .then((res) => this.setState({ user: res} ))
+      .then((res) => {
+        this.setState({ user: res} );
+        AsyncStorage.setItem(ACCESS_TOKEN_KEY, this.apiClient.accessToken);
+      })
       .catch(() => alert('ユーザー情報の取得に失敗しました'));
   }
 
