@@ -12,6 +12,8 @@ import {
   StyleSheet
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import Trend from './src/components/views/trend';
 import Search from './src/components/views/search';
 import Favorite from './src/components/views/favorite';
@@ -64,37 +66,41 @@ export default class Qiitake extends React.Component {
 
     return (
       <TabBarIOS
-        unselectedTintColor="yellow"
-        tintColor="white"
-        unselectedItemTintColor="red"
-        barTintColor="darkslateblue"
+        tintColor="#338ff1"
+        barTintColor="#3bf23d"
         style={styles.container}
       >
-        <TabBarIOS.Item
+        <Icon.TabBarItemIOS
           title="trend"
+          iconName="group"
+          iconColor="#ff0"
+          selectedIconColor="yellow"
           selected={current === 'trend'}
           onPress={() => this.setState({current: 'trend'})}
         >
           <Trend
             apiClient={this.apiClient}
           />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        </Icon.TabBarItemIOS>
+        <Icon.TabBarItemIOS
           title="search"
+          iconName="search"
           selected={current === 'search'}
           onPress={() => this.setState({current: 'search'})}
         >
           <Search />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        </Icon.TabBarItemIOS>
+        <Icon.TabBarItemIOS
           title="favorite"
+          iconName="star"
           selected={current === 'favorite'}
           onPress={() => this.setState({current: 'favorite'})}
         >
           <Favorite />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        </Icon.TabBarItemIOS>
+        <Icon.TabBarItemIOS
           title="settings"
+          iconName="gears"
           selected={current === 'settings'}
           onPress={() => this.setState({current: 'settings'})}
         >
@@ -103,7 +109,7 @@ export default class Qiitake extends React.Component {
             onUpdateLoginStatus={this.onUpdateLoginStatus}
             user={user}
           />
-        </TabBarIOS.Item>
+        </Icon.TabBarItemIOS>
       </TabBarIOS>
     );
   }

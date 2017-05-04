@@ -2979,6 +2979,12 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
+prop-types@^15.5.8:
+  version "15.5.8"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
+  dependencies:
+    fbjs "^0.8.9"
+
 prr@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/prr/-/prr-0.0.0.tgz#1a84b85908325501411853d0081ee3fa86e2926a"
@@ -3059,6 +3065,14 @@ react-native-dotenv@^0.0.4:
 react-native-loading-spinner-overlay@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.4.4.tgz#a19daea11787b1b539a2fa15945ab6f8bb97cd8c"
+
+react-native-vector-icons@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-4.1.0.tgz#816054e85ce7d0a68957b2a4433d2daea91fd821"
+  dependencies:
+    lodash "^4.0.0"
+    prop-types "^15.5.8"
+    yargs "^6.3.0"
 
 react-native@0.43.4:
   version "0.43.4"
