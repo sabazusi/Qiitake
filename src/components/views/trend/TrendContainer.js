@@ -11,6 +11,10 @@ import Post from '../../common/Post';
 
 import type ApiClient from '../../../api/client';
 
+type PostData = {
+  title: string
+};
+
 type Props = {
   apiClient: ApiClient
 };
@@ -31,22 +35,24 @@ export default class TrendList extends React.Component<void, Props, State> {
 
   componentDidMount() {
     this.setState({isFetching: true});
-    this.props.apiClient.getPostListMock()
+    this.props.apiClient.getLatestPosts()
       .then((res) => {
+        console.log(res);
         this.setState({
           isFetching: false,
           posts: this.state.posts.cloneWithRows(res)
         });
-      });
+      })
+      .catch(() => alert('投稿一覧の取得に失敗しました'));
   }
 
-  renderRow = (data: string) => {
+  renderRow = (data: PostData) => {
     return (
       <TouchableHighlight
         underlayColor="#fff"
         onPress={() => {
           this.props.navigator.push({
-            title: data,
+            title: data.title,
             component: Post,
             passProps: {
               apiClient: this.props.apiClient
@@ -58,7 +64,7 @@ export default class TrendList extends React.Component<void, Props, State> {
           <View>
             <Text style={{
             fontSize: 24
-          }}>{data}</Text>
+          }}>{data.title}</Text>
           </View>
           <View style={{
             height: 1,

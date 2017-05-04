@@ -28,8 +28,9 @@ export default class Qiitake extends React.Component {
   constructor() {
     super();
 
+    this.apiClient = new ApiClient();
     this.state = {
-      current: 'settings',
+      current: 'trend',
       isOpenLoginModal: false,
       user: {}
     };
@@ -38,14 +39,12 @@ export default class Qiitake extends React.Component {
 
   componentDidMount() {
     const accessToken = AsyncStorage.getItem(ACCESS_TOKEN_KEY, (error, result) => {
-      if (!error) {
-        this.apiClient = new ApiClient(result || '');
-      } else {
-        this.apiClient = new ApiClient();
+      if (!error && result) {
+        this.apiClient.updateAccessToken(result);
+        this.apiClient.getMyself()
+          .then((res) => this.setState({ user: res }))
+          .catch(() => {});
       }
-      this.apiClient.getMyself()
-        .then((res) => this.setState({ user: res }))
-        .catch(() => {});
     });
   }
 
@@ -73,14 +72,10 @@ export default class Qiitake extends React.Component {
         <Icon.TabBarItemIOS
           title="trend"
           iconName="group"
-          iconColor="#ff0"
-          selectedIconColor="yellow"
           selected={current === 'trend'}
           onPress={() => this.setState({current: 'trend'})}
         >
-          <Trend
-            apiClient={this.apiClient}
-          />
+          <Trend apiClient={this.apiClient} />
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="search"

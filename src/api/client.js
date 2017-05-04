@@ -81,6 +81,12 @@ export default class ApiClient {
     }
   }
 
+  getLatestPosts() {
+    return this._fetch('/api/v2/items')
+      .then((res) => res.json());
+  }
+
+
   getPostListMock() {
     return new Promise((resolve) => {
       setTimeout(() => {
