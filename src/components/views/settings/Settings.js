@@ -21,6 +21,7 @@ export default class Settings extends React.Component {
 
   render() {
     const {
+      user,
       apiClient,
       onUpdateLoginStatus
     } = this.props;
@@ -37,11 +38,17 @@ export default class Settings extends React.Component {
           }}
           apiClient={apiClient}
         />
-        <Button
-          style={{margin: 5, fontSize: 10}}
-          title="認証"
-          onPress={() => this.setState({isOpenModal: true})}
-        />
+        {
+          user.name ? (
+            <Text>{user.name}さん、ようこそ！</Text>
+          ) : (
+            <Button
+              style={{margin: 5, fontSize: 10}}
+              title="認証"
+              onPress={() => this.setState({isOpenModal: true})}
+            />
+          )
+        }
       </View>
     )
   }

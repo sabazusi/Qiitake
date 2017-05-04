@@ -24,17 +24,22 @@ export default class Qiitake extends React.Component {
     super();
     this.apiClient = new ApiClient();
     this.state = {
-      current: 'trend',
-      isOpenLoginModal: false
+      current: 'settings',
+      isOpenLoginModal: false,
+      user: {}
     };
   }
 
   onUpdateLoginStatus = () => {
+    this.apiClient.getMyself()
+      .then((res) => this.setState({ user: res} ))
+      .catch(() => alert('ユーザー情報の取得に失敗しました'));
   }
 
   render() {
     const {
-      current
+      current,
+      user
     } = this.state;
 
     return (
@@ -76,6 +81,7 @@ export default class Qiitake extends React.Component {
           <Settings
             apiClient={this.apiClient}
             onUpdateLoginStatus={this.onUpdateLoginStatus}
+            user={user}
           />
         </TabBarIOS.Item>
       </TabBarIOS>
