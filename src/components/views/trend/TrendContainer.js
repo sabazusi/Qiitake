@@ -2,17 +2,17 @@ import React from 'react';
 import {
   Text,
   View,
-  ListView,
-  TouchableHighlight,
-  NavigatorIOS
+  Image,
+  TouchableHighlight
 } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
+import GiftedListView from 'react-native-gifted-listview';
 import Post from '../../common/Post';
 
 import type ApiClient from '../../../api/client';
 
 type PostData = {
-  title: string
+  title: string,
+  url: string
 };
 
 type Props = {
@@ -20,7 +20,6 @@ type Props = {
 };
 
 type State = {
-  isFetching: boolean;
   posts: Array<*>;
 }
 
@@ -28,23 +27,15 @@ export default class TrendList extends React.Component<void, Props, State> {
   constructor() {
     super();
     this.state = {
-      isFetching: false,
-      posts: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+      posts: []
     };
   }
 
-  componentDidMount() {
-    this.setState({isFetching: true});
-    this.props.apiClient.getLatestPosts()
-      .then((res) => {
-        console.log(res);
-        this.setState({
-          isFetching: false,
-          posts: this.state.posts.cloneWithRows(res)
-        });
-      })
+  fetchPosts = (page: number = 1, callback: (data: *) => void, options: {}) => {
+    this.props.apiClient.getLatestPosts(page)
+      .then((posts) => callback(posts))
       .catch(() => alert('投稿一覧の取得に失敗しました'));
-  }
+  };
 
   renderRow = (data: PostData) => {
     return (
@@ -55,22 +46,36 @@ export default class TrendList extends React.Component<void, Props, State> {
             title: data.title,
             component: Post,
             passProps: {
-              apiClient: this.props.apiClient
+              url: data.url
             }
           })
         }}
       >
         <View>
-          <View>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            marginLeft: 5
+          }}>
+            <Image
+              source={{uri: data.user['profile_image_url']}}
+              style={{
+                width: 30,
+                height: 30
+              }}
+            />
             <Text style={{
-            fontSize: 24
+            fontSize: 16,
+            fontFamily: 'HiraginoSans-W3'
           }}>{data.title}</Text>
           </View>
           <View style={{
             height: 1,
-            backgroundColor: '#414141',
+            backgroundColor: '#dbd9d9',
             marginTop: 3,
-            marginBottom: 3,
+            marginBottom: 10,
+            marginLeft: 5,
+            marginRight: 5
           }} />
         </View>
       </TouchableHighlight>
@@ -79,24 +84,32 @@ export default class TrendList extends React.Component<void, Props, State> {
 
   render() {
     const {
-      isFetching,
       posts
     } = this.state;
+
     return (
-      <View>
-        <Spinner visible={this.state.isFetching} />
-        {
-          isFetching ? null : (
-            <ListView
-              style={{
-                marginTop: 50
-              }}
-              dataSource={posts}
-              renderRow={this.renderRow}
-            />
-          )
-        }
+      <View style={{
+        marginTop: 50,
+        marginBottom: 50
+      }}>
+        <GiftedListView
+          ref={(ref) => this.listRef = ref}
+          rowView={this.renderRow}
+          onFetch={this.fetchPosts}
+          refreshable={true}
+          enableEmptySections={true}
+          customStyles={{
+            paginationView: {
+              backgroundColor: '#eee',
+            },
+          }}
+          refreshableTintColor="blue"
+          paginationFetchingView={() => null}
+          paginationWaitingView={() => null}
+          onEndReached={() => this.listRef._onPaginate()}
+          onEndReachedThreshold={1}
+        />
       </View>
-    )
+    );
   }
 }

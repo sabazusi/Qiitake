@@ -3062,6 +3062,16 @@ react-native-dotenv@^0.0.4:
   dependencies:
     babel-plugin-dotenv "~0.0.2"
 
+react-native-gifted-listview@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/react-native-gifted-listview/-/react-native-gifted-listview-0.0.15.tgz#c92b5b7b32cea7705b727ab4bc199751379dce07"
+  dependencies:
+    react-native-gifted-spinner "^0.0.4"
+
+react-native-gifted-spinner@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-gifted-spinner/-/react-native-gifted-spinner-0.0.4.tgz#32652b5a60423f14719a1c3125613299af0995f2"
+
 react-native-loading-spinner-overlay@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.4.4.tgz#a19daea11787b1b539a2fa15945ab6f8bb97cd8c"
