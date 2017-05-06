@@ -12,7 +12,7 @@ import type ApiClient from '../../../api/client';
 
 type PostData = {
   title: string,
-  url: string
+  url: string,
 };
 
 type Props = {
@@ -24,6 +24,7 @@ type State = {
 }
 
 export default class TrendList extends React.Component<void, Props, State> {
+  listRef: HTMLElement;
   constructor() {
     super();
     this.state = {
@@ -33,12 +34,24 @@ export default class TrendList extends React.Component<void, Props, State> {
 
   fetchPosts = (page: number = 1, callback: (data: *) => void, options: {}) => {
     this.props.apiClient.getLatestPosts(page)
-      .then((posts) => callback(posts))
+      .then((posts) => {
+        if (page === 1) {
+          posts.push({ isLoadingDummy: true });
+        } else {
+          const current = this.listRef._getRows();
+          const loading = current.pop();
+          this.listRef._setRows(current);
+          posts.push(loading);
+        }
+        callback(posts);
+      })
       .catch(() => alert('投稿一覧の取得に失敗しました'));
   };
 
   renderRow = (data: PostData) => {
-    return (
+    return data.isLoadingDummy ? (
+      <Text>Now loading...</Text>
+    ) : (
       <TouchableHighlight
         underlayColor="#fff"
         onPress={() => {
