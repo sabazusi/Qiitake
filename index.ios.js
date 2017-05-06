@@ -1,8 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+// @flow
 
 import React from 'react';
 import {
@@ -11,7 +7,6 @@ import {
   AsyncStorage,
   StyleSheet
 } from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Trend from './src/components/views/trend';
@@ -20,14 +15,15 @@ import Favorite from './src/components/views/favorite';
 import Settings from './src/components/views/settings';
 
 import ApiClient from './src/api/client';
-
-const ACCESS_TOKEN_KEY = '@Qiitake:user:token';
+import Storage from './src/utils/storage';
 
 export default class Qiitake extends React.Component {
+  storage: Storage;
 
   constructor() {
     super();
 
+    this.storage = new Storage();
     this.apiClient = new ApiClient();
     this.state = {
       current: 'trend',
@@ -38,21 +34,23 @@ export default class Qiitake extends React.Component {
 
 
   componentDidMount() {
-    const accessToken = AsyncStorage.getItem(ACCESS_TOKEN_KEY, (error, result) => {
-      if (!error && result) {
-        this.apiClient.updateAccessToken(result);
-        this.apiClient.getMyself()
-          .then((res) => this.setState({ user: res }))
-          .catch(() => {});
-      }
-    });
+    this.storage.load()
+      .then(() => {
+        const accessToken = this.storage.getAccessToken();
+        if (accessToken) {
+          this.apiClient.updateAccessToken(accessToken);
+          this.apiClient.getMyself()
+            .then((res) => this.setState({ user: res }))
+            .catch(() => {});
+        }
+      });
   }
 
   onUpdateLoginStatus = () => {
     this.apiClient.getMyself()
       .then((res) => {
         this.setState({ user: res} );
-        AsyncStorage.setItem(ACCESS_TOKEN_KEY, this.apiClient.accessToken);
+        this.storage.updateAccessToken(this.apiClient.accessToken);
       })
       .catch(() => alert('ユーザー情報の取得に失敗しました'));
   }
