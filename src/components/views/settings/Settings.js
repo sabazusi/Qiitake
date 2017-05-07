@@ -40,7 +40,7 @@ export default class Settings extends React.Component {
         />
         {
           user.name ? (
-            <Text>{user.name}さん、ようこそ！</Text>
+            <Text>認証済み: {user.name}</Text>
           ) : (
             <Button
               style={{margin: 5, fontSize: 10}}
