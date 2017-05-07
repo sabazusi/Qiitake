@@ -1,11 +1,15 @@
 import React from 'react';
 import {
+  Animated,
+  Easing,
   Text,
   View,
   Image,
   TouchableHighlight
 } from 'react-native';
 import GiftedListView from 'react-native-gifted-listview';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Post from '../../common/Post';
 
 import type ApiClient from '../../../api/client';
@@ -20,7 +24,42 @@ type Props = {
 };
 
 type State = {
-  posts: Array<*>;
+  hasInitialized: boolean;
+}
+
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+
+class LoadingIcon extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      loadingIcon: new Animated.Value(0)
+    };
+    Animated.timing(this.state.loadingIcon, {
+      toValue: 1 * 1000,
+      duration: 2000 * 1000,
+      easing: Easing.linear
+    }).start()
+  }
+
+  render() {
+    return (
+      <Animated.View style={{
+        width: 20
+      }}>
+        <AnimatedIcon
+          name="hourglass-1"
+          size={20}
+          style={{transform: [{
+            rotate: this.state.loadingIcon.interpolate({
+              inputRange: [0, 1],
+              outputRange: [ '0deg', '360deg' ]
+            })
+          }]}}
+        />
+      </Animated.View>
+    );
+  }
 }
 
 export default class TrendList extends React.Component<void, Props, State> {
@@ -28,13 +67,14 @@ export default class TrendList extends React.Component<void, Props, State> {
   constructor() {
     super();
     this.state = {
-      posts: []
+      hasInitialized: false
     };
   }
 
   fetchPosts = (page: number = 1, callback: (data: *) => void, options: {}) => {
     this.props.apiClient.getLatestPosts(page)
       .then((posts) => {
+        this.setState({ hasInitialized: true });
         if (page === 1) {
           posts.push({ isLoadingDummy: true });
         } else {
@@ -50,7 +90,18 @@ export default class TrendList extends React.Component<void, Props, State> {
 
   renderRow = (data: PostData) => {
     return data.isLoadingDummy ? (
-      <Text>Now loading...</Text>
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <LoadingIcon />
+        <Text style={{
+          marginLeft: 15
+        }}>読み込んでいます...</Text>
+      </View>
     ) : (
       <TouchableHighlight
         underlayColor="#fff"
@@ -97,7 +148,7 @@ export default class TrendList extends React.Component<void, Props, State> {
 
   render() {
     const {
-      posts
+      hasInitialized
     } = this.state;
 
     return (
@@ -105,6 +156,8 @@ export default class TrendList extends React.Component<void, Props, State> {
         marginTop: 50,
         marginBottom: 50
       }}>
+
+        <Spinner visible={!hasInitialized} />
         <GiftedListView
           ref={(ref) => this.listRef = ref}
           rowView={this.renderRow}
