@@ -1,33 +1,31 @@
+// @flow
+
 import React from 'react';
 import {
   Animated,
   Easing,
-  Text,
-  View,
   Image,
-  TouchableHighlight
+  Text,
+  TouchableHighlight,
+  View
 } from 'react-native';
 import GiftedListView from 'react-native-gifted-listview';
-import Spinner from 'react-native-loading-spinner-overlay';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Post from '../../common/Post';
 
-import type ApiClient from '../../../api/client';
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+
+type Props = {
+  onFetch: (page: number) => Array<PostData>;
+  navigator: {
+    push: (state: {}) => void;
+  };
+};
 
 type PostData = {
   title: string,
   url: string,
 };
-
-type Props = {
-  apiClient: ApiClient
-};
-
-type State = {
-  hasInitialized: boolean;
-}
-
-const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 class LoadingIcon extends React.Component {
   constructor() {
@@ -62,19 +60,16 @@ class LoadingIcon extends React.Component {
   }
 }
 
-export default class TrendList extends React.Component<void, Props, State> {
+export default class LoadablePostList extends React.Component<void, Props, void> {
   listRef: HTMLElement;
+
   constructor() {
     super();
-    this.state = {
-      hasInitialized: false
-    };
   }
 
   fetchPosts = (page: number = 1, callback: (data: *) => void, options: {}) => {
-    this.props.apiClient.getLatestPosts(page)
+    this.props.onFetch(page)
       .then((posts) => {
-        this.setState({ hasInitialized: true });
         if (page === 1) {
           posts.push({ isLoadingDummy: true });
         } else {
@@ -87,6 +82,7 @@ export default class TrendList extends React.Component<void, Props, State> {
       })
       .catch(() => alert('投稿一覧の取得に失敗しました'));
   };
+
 
   renderRow = (data: PostData) => {
     return data.isLoadingDummy ? (
@@ -147,35 +143,24 @@ export default class TrendList extends React.Component<void, Props, State> {
   };
 
   render() {
-    const {
-      hasInitialized
-    } = this.state;
-
     return (
-      <View style={{
-        marginTop: 50,
-        marginBottom: 50
-      }}>
-
-        <Spinner visible={!hasInitialized} />
-        <GiftedListView
-          ref={(ref) => this.listRef = ref}
-          rowView={this.renderRow}
-          onFetch={this.fetchPosts}
-          refreshable={true}
-          enableEmptySections={true}
-          customStyles={{
-            paginationView: {
-              backgroundColor: '#eee',
-            },
-          }}
-          refreshableTintColor="blue"
-          paginationFetchingView={() => null}
-          paginationWaitingView={() => null}
-          onEndReached={() => this.listRef._onPaginate()}
-          onEndReachedThreshold={1}
-        />
-      </View>
+      <GiftedListView
+        ref={(ref) => this.listRef = ref}
+        rowView={this.renderRow}
+        onFetch={this.fetchPosts}
+        refreshable={true}
+        enableEmptySections={true}
+        customStyles={{
+          paginationView: {
+            backgroundColor: '#eee',
+          },
+        }}
+        refreshableTintColor="blue"
+        paginationFetchingView={() => null}
+        paginationWaitingView={() => null}
+        onEndReached={() => this.listRef._onPaginate()}
+        onEndReachedThreshold={1}
+      />
     );
   }
 }
