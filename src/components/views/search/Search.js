@@ -11,20 +11,24 @@ import {
   TouchableHighlight,
   SegmentedControlIOS
 } from 'react-native';
+import type Strorage from '../../../utils/storage';
 
-export default class Search extends React.Component {
-  render() {
-    return (
-      <NavigatorIOS
-        style={{flex: 1}}
-        initialRoute={{
-          title: "検索",
-          component: SearchContainer
-        }}
-      />
-    )
-  }
+const Search = (props) => {
+  return (
+    <NavigatorIOS
+      style={{flex: 1}}
+      initialRoute={{
+        title: "検索",
+        component: SearchContainer,
+        passProps: {
+          apiClient: props.apiClient,
+          storage: props.storage
+        }
+      }}
+    />
+  );
 }
+export default Search;
 
 class SearchContainer extends React.Component {
   constructor() {
