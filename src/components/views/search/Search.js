@@ -80,7 +80,7 @@ class SearchContainer extends React.Component {
             }}
             title="Search"
             accessibilityLabel="Search"
-            onPress={(value) => this.pushToSearch(value)}
+            onPress={() => this.pushToSearch(inputValue)}
           />
         </View>
         <SegmentedControlIOS
