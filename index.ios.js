@@ -81,7 +81,10 @@ export default class Qiitake extends React.Component {
           selected={current === 'search'}
           onPress={() => this.setState({current: 'search'})}
         >
-          <Search />
+          <Search
+            apiClient={this.apiClient}
+            storage={this.storage}
+          />
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="favorite"

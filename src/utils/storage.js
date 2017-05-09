@@ -33,6 +33,13 @@ export default class Storage {
     return this.stores[Keys.ACCESS_TOKEN] || null;
   }
 
+  getSearchCandidates() {
+    return {
+      fav: this.stores[Keys.SEARCH_FAV] || null,
+      history: this.stores[Keys.SEARCH_HISTORY] || null
+    };
+  }
+
   updateAccessToken(accessToken: string) {
     return new Promsie((resolve, reject) => {
       AsyncStorage.setItem(Keys.ACCESS_TOKEN, accessToken, (error) => {
@@ -41,4 +48,5 @@ export default class Storage {
       });
     });
   }
+
 }

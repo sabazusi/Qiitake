@@ -12,6 +12,7 @@ import {
   SegmentedControlIOS
 } from 'react-native';
 import type Strorage from '../../../utils/storage';
+import type ApiClient from '../../../api/client';
 
 const Search = (props) => {
   return (
@@ -30,17 +31,19 @@ const Search = (props) => {
 }
 export default Search;
 
-class SearchContainer extends React.Component {
+type Props = {
+  storage: Storage;
+  apiClient: ApiClient;
+};
+
+class SearchContainer extends React.Component<void, Props, void> {
+  dataSource: LostView.DataSource;
   constructor() {
     super();
-    const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       inputValue: '',
-      optionIndex: 0,
-      options: {
-        favorite: dataSource.cloneWithRows(['fav1', 'fav2', 'fav3', 'fav4']),
-        history: dataSource.cloneWithRows(['hist1', 'hist2', 'hist3', 'hist4', 'hist5', 'hist6', 'hist7'])
-      }
+      optionIndex: 0
     };
   }
 
@@ -55,9 +58,10 @@ class SearchContainer extends React.Component {
   render() {
     const {
       inputValue,
-      optionIndex,
-      options
+      optionIndex
     } = this.state;
+    const {fav, history} = this.props.storage.getSearchCandidates();
+    const candidates = optionIndex === 0 ? fav || [] : history || []
 
     return (
       <View style={{
@@ -93,17 +97,21 @@ class SearchContainer extends React.Component {
           onChange={(event) => this.setState({optionIndex: event.nativeEvent.selectedSegmentIndex})}
         />
         <View>
-          <ListView
-            dataSource={optionIndex === 0 ? options.favorite : options.history}
-            renderRow={(data) => (
-              <TouchableHighlight
-                underlayColor="#fff"
-                onPress={() => this.pushToSearch(data)}
-              >
-                <Text style={{fontSize: 20}}>{data}</Text>
-              </TouchableHighlight>
-            )}
-          />
+          {
+            candidates.length > 0 ? (
+              <ListView
+                dataSource={this.dataSource.cloneWithRows(candidates)}
+                renderRow={(data) => (
+                  <TouchableHighlight
+                    underlayColor="#fff"
+                    onPress={() => this.pushToSearch(data)}
+                  >
+                    <Text style={{fontSize: 20}}>{data}</Text>
+                  </TouchableHighlight>
+                )}
+              />
+            ) : null
+          }
         </View>
       </View>
     );
