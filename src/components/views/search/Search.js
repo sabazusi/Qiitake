@@ -49,6 +49,7 @@ class SearchContainer extends React.Component<void, Props, void> {
 
   pushToSearch(value) {
     if (!value) return;
+    this.props.storage.addSearchHistory(value);
     this.props.navigator.push({
       title: `${value}の検索結果`,
       component: () => { return (<Text>はい</Text>) }

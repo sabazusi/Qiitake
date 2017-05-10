@@ -22,7 +22,7 @@ export default class Storage {
     return new Promise((resolve, reject) => {
       AsyncStorage.getAllKeys((error, keys) => {
         AsyncStorage.multiGet(keys, (error, stores) => {
-          stores.map((store) => this.stores[store[0]] = store[1]);
+          stores.map((store) => this.stores[store[0]] = JSON.parse(store[1]));
           resolve();
         });
       })
@@ -41,12 +41,29 @@ export default class Storage {
   }
 
   updateAccessToken(accessToken: string) {
-    return new Promsie((resolve, reject) => {
-      AsyncStorage.setItem(Keys.ACCESS_TOKEN, accessToken, (error) => {
+    return new Promise((resolve, reject) => {
+      AsyncStorage.setItem(Keys.ACCESS_TOKEN, JSON.stringify(accessToken), (error) => {
         if (error) reject();
         resolve();
       });
     });
+  }
+
+  addSearchHistory(word: string) {
+    const current = this.stores[Keys.SEARCH_HISTORY] || [];
+    let next;
+    if (current.indexOf(word) > -1) {
+      next = [word].concat(current.filter((exist) => exist !== word));
+    } else {
+      next = [word].concat(current);
+    }
+
+    return new Promise((resolve, reject) => {
+      AsyncStorage.setItem(Keys.SEARCH_HISTORY, JSON.stringify(next), (error) => {
+        if (error) reject();
+        resolve();
+      })
+    })
   }
 
 }
