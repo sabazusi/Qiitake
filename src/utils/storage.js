@@ -35,8 +35,8 @@ export default class Storage {
 
   getSearchCandidates() {
     return {
-      fav: this.stores[Keys.SEARCH_FAV] || null,
-      history: this.stores[Keys.SEARCH_HISTORY] || null
+      fav: this.stores[Keys.SEARCH_FAV] || [],
+      history: this.stores[Keys.SEARCH_HISTORY] || []
     };
   }
 
@@ -61,6 +61,7 @@ export default class Storage {
     return new Promise((resolve, reject) => {
       AsyncStorage.setItem(Keys.SEARCH_HISTORY, JSON.stringify(next), (error) => {
         if (error) reject();
+        this.stores[Keys.SEARCH_HISTORY] = next;
         resolve();
       })
     })

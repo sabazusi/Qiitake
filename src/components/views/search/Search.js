@@ -37,14 +37,24 @@ type Props = {
 };
 
 class SearchContainer extends React.Component<void, Props, void> {
-  dataSource: LostView.DataSource;
+  dataSource: ListView.DataSource;
   constructor() {
     super();
     this.dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       inputValue: '',
-      optionIndex: 0
+      optionIndex: 0,
+      candidates: {
+        fav: [],
+        history: []
+      }
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      candidates: nextProps.storage.getSearchCandidates()
+    });
   }
 
   pushToSearch(value) {
@@ -59,10 +69,10 @@ class SearchContainer extends React.Component<void, Props, void> {
   render() {
     const {
       inputValue,
-      optionIndex
+      optionIndex,
+      candidates
     } = this.state;
-    const {fav, history} = this.props.storage.getSearchCandidates();
-    const candidates = optionIndex === 0 ? fav || [] : history || []
+    const targetCandidates = candidates[optionIndex === 0 ? 'fav' : 'history'];
 
     return (
       <View style={{
@@ -99,9 +109,9 @@ class SearchContainer extends React.Component<void, Props, void> {
         />
         <View>
           {
-            candidates.length > 0 ? (
+            targetCandidates.length > 0 ? (
               <ListView
-                dataSource={this.dataSource.cloneWithRows(candidates)}
+                dataSource={this.dataSource.cloneWithRows(targetCandidates)}
                 renderRow={(data) => (
                   <TouchableHighlight
                     underlayColor="#fff"
