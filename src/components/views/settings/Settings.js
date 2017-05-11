@@ -23,6 +23,7 @@ export default class Settings extends React.Component {
     const {
       user,
       apiClient,
+      storage,
       onUpdateLoginStatus
     } = this.props;
     return (
@@ -40,7 +41,21 @@ export default class Settings extends React.Component {
         />
         {
           user.name ? (
-            <Text>認証済み: {user.name}</Text>
+            <View>
+              <Text>認証済み: {user.name}</Text>
+              <Button
+                style={{margin: 5, fontSize: 10}}
+                title="認証解除"
+                onPress={() => {
+                  storage.removeAccessToken()
+                    .then(() => { 
+                      alert('認証を解除しました');
+                      onUpdateLoginStatus(true);
+                    })
+                    .catch(() => alert('認証解除に失敗しました'));
+                }}
+              />
+            </View>
           ) : (
             <Button
               style={{margin: 5, fontSize: 10}}

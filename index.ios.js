@@ -33,7 +33,7 @@ export default class Qiitake extends React.Component {
   }
 
 
-  componentDidMount() {
+  componentWillMount() {
     this.storage.load()
       .then(() => {
         const accessToken = this.storage.getAccessToken();
@@ -49,7 +49,7 @@ export default class Qiitake extends React.Component {
   onUpdateLoginStatus = () => {
     this.apiClient.getMyself()
       .then((res) => {
-        this.setState({ user: res} );
+        this.setState({ user: res } );
         this.storage.updateAccessToken(this.apiClient.accessToken);
       })
       .catch(() => alert('ユーザー情報の取得に失敗しました'));
@@ -104,6 +104,7 @@ export default class Qiitake extends React.Component {
             apiClient={this.apiClient}
             onUpdateLoginStatus={this.onUpdateLoginStatus}
             user={user}
+            storage={this.storage}
           />
         </Icon.TabBarItemIOS>
       </TabBarIOS>

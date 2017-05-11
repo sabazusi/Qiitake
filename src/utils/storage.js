@@ -49,6 +49,16 @@ export default class Storage {
     });
   }
 
+  removeAccessToken() {
+    return new Promise((resolve,reject) => {
+      AsyncStorage.removeItem(Keys.ACCESS_TOKEN, (error) => {
+        if (error) reject();
+        this.stores[Keys.ACCESS_TOKEN] = null;
+        resolve();
+      });
+    });
+  }
+
   addSearchHistory(word: string) {
     const current = this.stores[Keys.SEARCH_HISTORY] || [];
     let next;
