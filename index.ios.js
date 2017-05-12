@@ -17,6 +17,13 @@ import Settings from './src/components/views/settings';
 import ApiClient from './src/api/client';
 import Storage from './src/utils/storage';
 
+const TabTypes = {
+  LATEST: 'latest',
+  SEARCH: 'search',
+  FAVORITE: 'favorite',
+  SETTINGS: 'settings'
+};
+
 export default class Qiitake extends React.Component {
   storage: Storage;
 
@@ -26,7 +33,7 @@ export default class Qiitake extends React.Component {
     this.storage = new Storage();
     this.apiClient = new ApiClient();
     this.state = {
-      current: 'trend',
+      current: TabTypes.LATEST,
       isOpenLoginModal: false,
       user: {}
     };
@@ -68,18 +75,18 @@ export default class Qiitake extends React.Component {
         style={styles.container}
       >
         <Icon.TabBarItemIOS
-          title="trend"
+          title="latest"
           iconName="group"
-          selected={current === 'trend'}
-          onPress={() => this.setState({current: 'trend'})}
+          selected={current === TabTypes.LATEST}
+          onPress={() => this.setState({current: TabTypes.LATEST})}
         >
           <Trend apiClient={this.apiClient} />
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="search"
           iconName="search"
-          selected={current === 'search'}
-          onPress={() => this.setState({current: 'search'})}
+          selected={current === TabTypes.SEARCH}
+          onPress={() => this.setState({current: TabTypes.SEARCH})}
         >
           <Search
             apiClient={this.apiClient}
@@ -89,16 +96,16 @@ export default class Qiitake extends React.Component {
         <Icon.TabBarItemIOS
           title="favorite"
           iconName="star"
-          selected={current === 'favorite'}
-          onPress={() => this.setState({current: 'favorite'})}
+          selected={current === TabTypes.FAVORITE}
+          onPress={() => this.setState({current: TabTypes.FAVORITE})}
         >
           <Favorite />
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="settings"
           iconName="gears"
-          selected={current === 'settings'}
-          onPress={() => this.setState({current: 'settings'})}
+          selected={current === TabTypes.SETTINGS}
+          onPress={() => this.setState({current: TabTypes.SETTINGS })}
         >
           <Settings
             apiClient={this.apiClient}
