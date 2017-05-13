@@ -15,7 +15,7 @@ type State = {
   hasInitialized: boolean;
 }
 
-class TrendList extends React.Component<void, Props, State> {
+class LatestList extends React.Component<void, Props, State> {
   constructor() {
     super();
     this.state = {
@@ -52,13 +52,13 @@ class TrendList extends React.Component<void, Props, State> {
   }
 }
 
-const Trend = (props: Props) => {
+const Latest = (props: Props) => {
   return (
     <NavigatorIOS
       style={{flex: 1}}
       initialRoute={{
         title: '話題の投稿',
-        component: TrendList,
+        component: LatestList,
         passProps: {
           apiClient: props.apiClient
         }
@@ -67,4 +67,4 @@ const Trend = (props: Props) => {
   );
 }
 
-export default Trend;
+export default Latest;

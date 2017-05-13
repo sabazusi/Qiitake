@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Trend from './src/components/views/trend';
+import Latest from './src/components/views/latest';
 import Search from './src/components/views/search';
 import Favorite from './src/components/views/favorite';
 import Settings from './src/components/views/settings';
@@ -80,7 +80,7 @@ export default class Qiitake extends React.Component {
           selected={current === TabTypes.LATEST}
           onPress={() => this.setState({current: TabTypes.LATEST})}
         >
-          <Trend apiClient={this.apiClient} />
+          <Latest apiClient={this.apiClient} />
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="search"
