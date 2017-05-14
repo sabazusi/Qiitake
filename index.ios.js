@@ -34,7 +34,6 @@ export default class Qiitake extends React.Component {
     this.apiClient = new ApiClient();
     this.state = {
       current: TabTypes.LATEST,
-      isOpenLoginModal: false,
       user: {}
     };
   }
