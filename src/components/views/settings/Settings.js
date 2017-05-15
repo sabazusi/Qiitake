@@ -9,17 +9,52 @@ import {
   Text,
   Modal
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import LoginModal from '../../common/LoginModal';
 
 export default class Settings extends React.Component {
   constructor() {
     super();
-    this.state = {
-      isOpenModal: false
-    }
   }
 
   render() {
+    const {
+      login,
+      logout,
+      user
+    } = this.props;
+
+    return (
+      <View
+        style={{marginTop: 30}}
+      >
+        {
+          user.isProcessing ? (
+            <Spinner visible={true} />
+          ) : user.name ?
+            (
+              <View>
+                <Text>認証済み: {user.name}</Text>
+                <Button
+                  style={{margin: 5, fontSize: 10}}
+                  title="認証解除"
+                  onPress={logout}
+                />
+              </View>
+            ) : (
+              <Button
+                style={{margin: 5, fontSize: 10}}
+                title="認証"
+                onPress={login}
+              />
+            )
+        }
+      </View>
+    );
+  }
+
+  /**
+  render_old() {
     const {
       user,
       apiClient,
@@ -48,7 +83,7 @@ export default class Settings extends React.Component {
                 title="認証解除"
                 onPress={() => {
                   storage.removeAccessToken()
-                    .then(() => { 
+                    .then(() => {
                       alert('認証を解除しました');
                       onUpdateLoginStatus(true);
                     })
@@ -67,4 +102,5 @@ export default class Settings extends React.Component {
       </View>
     )
   }
+  */
 }

@@ -14,6 +14,8 @@ import Search from './src/components/views/search';
 import Favorite from './src/components/views/favorite';
 import Settings from './src/components/views/settings';
 
+import LoginModal from './src/components/common/LoginModal';
+
 import ApiClient from './src/api/client';
 import Storage from './src/utils/storage';
 
@@ -33,8 +35,11 @@ export default class Qiitake extends React.Component {
     this.storage = new Storage();
     this.apiClient = new ApiClient();
     this.state = {
+      isOpenLoginModal: false,
       current: TabTypes.LATEST,
-      user: {}
+      user: {
+        isProcessing: true
+      }
     };
   }
 
@@ -51,6 +56,13 @@ export default class Qiitake extends React.Component {
         }
       });
   }
+
+  showLoginModal = () => {
+    this.setState({ isOpenLoginModal: true })
+  };
+
+  logout = () => {
+  };
 
   onUpdateLoginStatus = () => {
     this.apiClient.getMyself()
@@ -111,6 +123,8 @@ export default class Qiitake extends React.Component {
             onUpdateLoginStatus={this.onUpdateLoginStatus}
             user={user}
             storage={this.storage}
+            login={this.showLoginModal}
+            logout={this.logout}
           />
         </Icon.TabBarItemIOS>
       </TabBarIOS>
