@@ -73,6 +73,21 @@ export default class Qiitake extends React.Component {
       .catch(() => alert('ユーザー情報の取得に失敗しました'));
   }
 
+  withModal = (children) => {
+    return (
+      <LoginModal
+        isOpen={false}
+        onComplete={(accessToken) => {
+          this.apiClient.updateAccessToken(accessToken);
+          this.onUpdateLoginStatus();
+        }}
+        apiClient={this.apiClient}
+      >
+        {children}
+      </LoginModal>
+    );
+  };
+
   render() {
     const {
       current,
@@ -91,7 +106,7 @@ export default class Qiitake extends React.Component {
           selected={current === TabTypes.LATEST}
           onPress={() => this.setState({current: TabTypes.LATEST})}
         >
-          <Latest apiClient={this.apiClient} />
+          {this.withModal(<Latest apiClient={this.apiClient} />)}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="search"
@@ -99,10 +114,12 @@ export default class Qiitake extends React.Component {
           selected={current === TabTypes.SEARCH}
           onPress={() => this.setState({current: TabTypes.SEARCH})}
         >
-          <Search
-            apiClient={this.apiClient}
-            storage={this.storage}
-          />
+          {this.withModal(
+            <Search
+              apiClient={this.apiClient}
+              storage={this.storage}
+            />
+          )}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="favorite"

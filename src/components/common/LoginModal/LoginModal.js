@@ -17,6 +17,7 @@ type Props = {
   isOpen: boolean;
   onComplete: (accessToken: string) => void;
   apiClient: ApiClient;
+  children?: *;
 };
 
 export default class LoginModal extends React.Component {
@@ -37,7 +38,6 @@ export default class LoginModal extends React.Component {
       state
     } = apiClient.getAuthenticationStatusFromAuthUrl(navState.url);
     if (code && state === this.loginStateCode) {
-      console.log(navState.url);
       this.setState({ isLoading: true });
       this.props.apiClient.getAccessToken(code)
         .then((accessToken) => {
@@ -54,12 +54,13 @@ export default class LoginModal extends React.Component {
   render() {
     const {
       isOpen,
-      apiClient
+      apiClient,
+      children
     } = this.props;
     const { isLoading } = this.state;
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <Spinner visible={this.state.isLoading} />
         { isOpen && !isLoading ? (
           <Modal animationType="slide">
@@ -70,7 +71,7 @@ export default class LoginModal extends React.Component {
               onNavigationStateChange={this.changeState}
             />
           </Modal>
-        ) : null}
+        ) : children || null}
       </View>
     );
   }
