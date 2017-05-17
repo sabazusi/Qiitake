@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import parse from 'url-parse';
 import {
   Button,
   View,
@@ -10,8 +9,6 @@ import {
   Modal
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import LoginModal from '../../common/LoginModal';
-
 
 const Settings = (props) => {
   const {

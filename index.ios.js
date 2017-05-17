@@ -38,7 +38,7 @@ export default class Qiitake extends React.Component {
       isOpenLoginModal: false,
       current: TabTypes.LATEST,
       user: {
-        isProcessing: true
+        isProcessing: false
       }
     };
   }
@@ -62,9 +62,15 @@ export default class Qiitake extends React.Component {
   };
 
   logout = () => {
+    this.storage.removeAccessToken()
+      .then(() => {
+        this.setState({ user: {} });
+        alert('ログアウトしました');
+      });
   };
 
   onUpdateLoginStatus = () => {
+    this.setState({ user: { isProcessing: true } });
     this.apiClient.getMyself()
       .then((res) => {
         this.setState({ user: res } );
@@ -76,7 +82,7 @@ export default class Qiitake extends React.Component {
   withModal = (children) => {
     return (
       <LoginModal
-        isOpen={false}
+        isOpen={this.state.isOpenLoginModal}
         onComplete={(accessToken) => {
           this.apiClient.updateAccessToken(accessToken);
           this.onUpdateLoginStatus();
@@ -127,7 +133,7 @@ export default class Qiitake extends React.Component {
           selected={current === TabTypes.FAVORITE}
           onPress={() => this.setState({current: TabTypes.FAVORITE})}
         >
-          <Favorite />
+          {this.withModal(<Favorite />)}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="settings"
@@ -135,14 +141,16 @@ export default class Qiitake extends React.Component {
           selected={current === TabTypes.SETTINGS}
           onPress={() => this.setState({current: TabTypes.SETTINGS })}
         >
-          <Settings
-            apiClient={this.apiClient}
-            onUpdateLoginStatus={this.onUpdateLoginStatus}
-            user={user}
-            storage={this.storage}
-            login={this.showLoginModal}
-            logout={this.logout}
-          />
+          {this.withModal(
+            <Settings
+              apiClient={this.apiClient}
+              onUpdateLoginStatus={this.onUpdateLoginStatus}
+              user={user}
+              storage={this.storage}
+              login={this.showLoginModal}
+              logout={this.logout}
+            />
+          )}
         </Icon.TabBarItemIOS>
       </TabBarIOS>
     );
