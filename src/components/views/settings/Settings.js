@@ -21,10 +21,9 @@ const Settings = (props) => {
     <View
       style={{marginTop: 30}}
     >
+      <Spinner visible={user.isProcessing} />
       {
-        user.isProcessing ? (
-          <Spinner visible={true} />
-        ) : user.name ?
+        user.name ?
           (
             <View>
               <Text>認証済み: {user.name}</Text>

@@ -73,7 +73,7 @@ export default class Qiitake extends React.Component {
     this.setState({ user: { isProcessing: true } });
     this.apiClient.getMyself()
       .then((res) => {
-        this.setState({ user: res } );
+        setTimeout(() => this.setState({ user: res } ), 500);
         this.storage.updateAccessToken(this.apiClient.accessToken);
       })
       .catch(() => alert('ユーザー情報の取得に失敗しました'));
@@ -84,9 +84,11 @@ export default class Qiitake extends React.Component {
       <LoginModal
         isOpen={this.state.isOpenLoginModal}
         onComplete={(accessToken) => {
+          this.setState({ isOpenLoginModal: false });
           this.apiClient.updateAccessToken(accessToken);
           this.onUpdateLoginStatus();
         }}
+        onFail={() => this.setState({ isOpenLoginModal: false })}
         apiClient={this.apiClient}
       >
         {children}
@@ -144,7 +146,6 @@ export default class Qiitake extends React.Component {
           {this.withModal(
             <Settings
               apiClient={this.apiClient}
-              onUpdateLoginStatus={this.onUpdateLoginStatus}
               user={user}
               storage={this.storage}
               login={this.showLoginModal}
