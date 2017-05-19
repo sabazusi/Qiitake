@@ -39,6 +39,12 @@ export default class Qiitake extends React.Component {
       current: TabTypes.LATEST,
       user: {
         isProcessing: false
+      },
+      search: {
+        candidates: {
+          fav: [],
+          history: []
+        }
       }
     };
   }
@@ -54,6 +60,12 @@ export default class Qiitake extends React.Component {
             .then((res) => this.setState({ user: res }))
             .catch(() => {});
         }
+
+        this.setState({
+          search: {
+            candidates: this.storage.getSearchCandidates()
+          }
+        });
       });
   }
 
@@ -99,7 +111,8 @@ export default class Qiitake extends React.Component {
   render() {
     const {
       current,
-      user
+      user,
+      search
     } = this.state;
 
     return (
@@ -126,6 +139,7 @@ export default class Qiitake extends React.Component {
             <Search
               apiClient={this.apiClient}
               storage={this.storage}
+              candidates={search.candidates}
             />
           )}
         </Icon.TabBarItemIOS>

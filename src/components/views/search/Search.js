@@ -23,7 +23,8 @@ const Search = (props) => {
         component: SearchContainer,
         passProps: {
           apiClient: props.apiClient,
-          storage: props.storage
+          storage: props.storage,
+          candidates: props.candidates
         }
       }}
     />
@@ -43,18 +44,8 @@ class SearchContainer extends React.Component<void, Props, void> {
     this.dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       inputValue: '',
-      optionIndex: 0,
-      candidates: {
-        fav: [],
-        history: []
-      }
+      optionIndex: 0
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      candidates: nextProps.storage.getSearchCandidates()
-    });
   }
 
   pushToSearch(value) {
@@ -69,9 +60,11 @@ class SearchContainer extends React.Component<void, Props, void> {
   render() {
     const {
       inputValue,
-      optionIndex,
-      candidates
+      optionIndex
     } = this.state;
+    const {
+      candidates
+    } = this.props;
     const targetCandidates = candidates[optionIndex === 0 ? 'fav' : 'history'];
 
     return (
