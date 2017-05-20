@@ -32,11 +32,12 @@ export default class Qiitake extends React.Component {
   constructor() {
     super();
 
-    this.storage = new Storage();
+    this.storage = new Storage(this.onUpdateStorage);
     this.apiClient = new ApiClient();
     this.state = {
       isOpenLoginModal: false,
       current: TabTypes.LATEST,
+      dataStore: {},
       user: {
         isProcessing: false
       },
@@ -49,6 +50,11 @@ export default class Qiitake extends React.Component {
     };
   }
 
+  onUpdateStorage = (changes: {}) => {
+    this.setState({
+      dataSource: Object.assign({}, this.state.dataSource, changes)
+    });
+  };
 
   componentWillMount() {
     this.storage.load()

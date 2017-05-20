@@ -14,8 +14,9 @@ const Keys = {
 };
 
 export default class Storage {
-  constructor() {
+  constructor(onChangeHandler: (stores: {}) => void) {
     this.stores = {};
+    this.handler = onChangeHandler;
   }
 
   load() {
@@ -23,6 +24,7 @@ export default class Storage {
       AsyncStorage.getAllKeys((error, keys) => {
         AsyncStorage.multiGet(keys, (error, stores) => {
           stores.map((store) => this.stores[store[0]] = JSON.parse(store[1]));
+          onChangeHandler(this.stores);
           resolve();
         });
       })
