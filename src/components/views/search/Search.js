@@ -80,15 +80,9 @@ class SearchContainer extends React.Component<void, Props, void> {
           <TextInput
             style={{height: 40, width: '70%', borderColor: 'gray', borderWidth: 1}}
             onChangeText={(inputValue) => this.setState({inputValue})}
-          />
-          <Button
-            style={{
-              width: '20%',
-              backgroundColor: '#b8b8b8'
-            }}
-            title="Search"
-            accessibilityLabel="Search"
-            onPress={() => this.pushToSearch(inputValue)}
+            returnKeyType="done"
+            returnKeyLabel="検索"
+            onSubmitEditing={() => this.pushToSearch(this.state.inputValue)}
           />
         </View>
         <SegmentedControlIOS
