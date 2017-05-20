@@ -2,7 +2,7 @@
 
 import { AsyncStorage } from 'react-native';
 
-const Keys = {
+export const StorageKeys = {
   // @string
   ACCESS_TOKEN: '@Qiitake:user:token',
   // @array<string>
@@ -23,8 +23,8 @@ export default class Storage {
     return new Promise((resolve, reject) => {
       AsyncStorage.getAllKeys((error, keys) => {
         AsyncStorage.multiGet(keys, (error, stores) => {
-          stores.map((store) => this.stores[store[0]] = JSON.parse(store[1]));
-          onChangeHandler(this.stores);
+          stores.forEach((store) => this.stores[store[0]] = JSON.parse(store[1]));
+          this.handler(this.stores);
           resolve();
         });
       })
@@ -32,19 +32,12 @@ export default class Storage {
   }
 
   getAccessToken() {
-    return this.stores[Keys.ACCESS_TOKEN] || null;
-  }
-
-  getSearchCandidates() {
-    return {
-      fav: this.stores[Keys.SEARCH_FAV] || [],
-      history: this.stores[Keys.SEARCH_HISTORY] || []
-    };
+    return this.stores[StorageKeys.ACCESS_TOKEN] || null;
   }
 
   updateAccessToken(accessToken: string) {
     return new Promise((resolve, reject) => {
-      AsyncStorage.setItem(Keys.ACCESS_TOKEN, JSON.stringify(accessToken), (error) => {
+      AsyncStorage.setItem(StorageKeys.ACCESS_TOKEN, JSON.stringify(accessToken), (error) => {
         if (error) reject();
         resolve();
       });
@@ -53,16 +46,16 @@ export default class Storage {
 
   removeAccessToken() {
     return new Promise((resolve,reject) => {
-      AsyncStorage.removeItem(Keys.ACCESS_TOKEN, (error) => {
+      AsyncStorage.removeItem(StorageKeys.ACCESS_TOKEN, (error) => {
         if (error) reject();
-        this.stores[Keys.ACCESS_TOKEN] = null;
+        this.stores[StorageKeys.ACCESS_TOKEN] = null;
         resolve();
       });
     });
   }
 
   addSearchHistory(word: string) {
-    const current = this.stores[Keys.SEARCH_HISTORY] || [];
+    const current = this.stores[StorageKeys.SEARCH_HISTORY] || [];
     let next;
     if (current.indexOf(word) > -1) {
       next = [word].concat(current.filter((exist) => exist !== word));
@@ -71,9 +64,10 @@ export default class Storage {
     }
 
     return new Promise((resolve, reject) => {
-      AsyncStorage.setItem(Keys.SEARCH_HISTORY, JSON.stringify(next), (error) => {
+      AsyncStorage.setItem(StorageKeys.SEARCH_HISTORY, JSON.stringify(next), (error) => {
         if (error) reject();
-        this.stores[Keys.SEARCH_HISTORY] = next;
+        this.stores[StorageKeys.SEARCH_HISTORY] = next;
+        this.handler(this.stores);
         resolve();
       })
     })
