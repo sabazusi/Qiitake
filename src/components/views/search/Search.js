@@ -65,7 +65,7 @@ class SearchContainer extends React.Component<void, Props, void> {
     const {
       candidates
     } = this.props;
-    const targetCandidates = candidates[optionIndex === 0 ? 'fav' : 'history'];
+    const targetCandidates = candidates[optionIndex === 0 ? 'history' : 'history'];
 
     return (
       <View style={{
@@ -90,7 +90,7 @@ class SearchContainer extends React.Component<void, Props, void> {
             width: '90%',
             marginTop: 30
           }}
-          values={['お気に入り', '検索履歴']}
+          values={['検索履歴', 'お気に入り']}
           selectedIndex={optionIndex}
           onChange={(event) => this.setState({optionIndex: event.nativeEvent.selectedSegmentIndex})}
         />
