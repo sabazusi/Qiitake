@@ -91,7 +91,9 @@ export default class ApiClient {
       .then((res) => res.json());
   }
 
-  getPostListByKeyword(keyword: string) {
+  getPostListByKeyword(keyword: string, page: number = 1) {
+    return this._fetch(`/api/v2/items?page=${page}&query=${keyword}`)
+      .then((res) => res.json());
   }
 
 }

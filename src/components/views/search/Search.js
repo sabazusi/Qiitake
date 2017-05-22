@@ -11,31 +11,38 @@ import {
   TouchableHighlight,
   SegmentedControlIOS
 } from 'react-native';
+import LoadablePostList from '../../common/LoadablePostList';
 import type Strorage from '../../../utils/storage';
 import type ApiClient from '../../../api/client';
-
-const Search = (props) => {
-  return (
-    <NavigatorIOS
-      style={{flex: 1}}
-      initialRoute={{
-        title: "検索",
-        component: SearchContainer,
-        passProps: {
-          apiClient: props.apiClient,
-          storage: props.storage,
-          candidates: props.candidates
-        }
-      }}
-    />
-  );
-}
-export default Search;
 
 type Props = {
   storage: Storage;
   apiClient: ApiClient;
 };
+
+class SearchResult extends React.Component {
+  onFetchPosts = (page: number) => {
+    const {
+      apiClient,
+      keyword
+    } = this.props;
+    return apiClient.getPostListByKeyword(keyword, page);
+  };
+
+  render() {
+    return (
+      <View style={{
+        marginTop: 50,
+        marginBottom: 50
+      }}>
+        <LoadablePostList
+          onFetch={this.onFetchPosts}
+          navigator={this.props.navigator}
+        />
+      </View>
+    );
+  }
+}
 
 class SearchContainer extends React.Component<void, Props, void> {
   dataSource: ListView.DataSource;
@@ -50,10 +57,21 @@ class SearchContainer extends React.Component<void, Props, void> {
 
   pushToSearch(value) {
     if (!value) return;
-    this.props.storage.addSearchHistory(value);
-    this.props.navigator.push({
+    const {
+      storage,
+      navigator,
+      apiClient
+    } = this.props;
+    storage.addSearchHistory(value);
+    navigator.push({
       title: `${value}の検索結果`,
-      component: () => { return (<Text>はい</Text>) }
+      component: () => (
+        <SearchResult
+          apiClient={apiClient}
+          navigator={navigator}
+          keyword={value}
+        />
+      )
     });
   }
 
@@ -115,3 +133,17 @@ class SearchContainer extends React.Component<void, Props, void> {
     );
   }
 }
+
+const Search = (props) => {
+  return (
+    <NavigatorIOS
+      style={{flex: 1}}
+      initialRoute={{
+        title: "検索",
+        component: SearchContainer,
+        passProps: { ...props }
+      }}
+    />
+  );
+}
+export default Search;
