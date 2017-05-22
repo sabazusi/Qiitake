@@ -65,7 +65,7 @@ class SearchContainer extends React.Component<void, Props, void> {
     const {
       candidates
     } = this.props;
-    const targetCandidates = candidates[optionIndex === 0 ? 'history' : 'history'];
+    const targetCandidates = candidates[optionIndex === 0 ? 'history' : 'fav'];
 
     return (
       <View style={{
