@@ -11,7 +11,18 @@ type Props = {
 
 const PostItem = (props: Props) => {
   return props.url ? (
-    <WebView source={{uri: props.url.replace(/^(http:\/\/)/, 'https://')}} />
+    <View style={{flex: 1}}>
+      <WebView source={{uri: props.url.replace(/^(http:\/\/)/, 'https://')}} />
+      <View
+        style={{
+          width: '100%',
+          bottom: 50,
+          height: 30,
+          backgroundColor: '#ff0',
+          position: 'absolute'
+        }}
+      />
+    </View>
   ) : (
     <View>
       <Spinner visible={true} />
