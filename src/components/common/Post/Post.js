@@ -4,6 +4,7 @@ import {
   WebView
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Toolbar from './Toolbar';
 
 type Props = {
   url: string;
@@ -13,13 +14,9 @@ const PostItem = (props: Props) => {
   return props.url ? (
     <View style={{flex: 1}}>
       <WebView source={{uri: props.url.replace(/^(http:\/\/)/, 'https://')}} />
-      <View
+      <Toolbar
         style={{
-          width: '100%',
-          bottom: 50,
-          height: 30,
-          backgroundColor: '#ff0',
-          position: 'absolute'
+          backgroundColor: '#42c693'
         }}
       />
     </View>
