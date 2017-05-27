@@ -1,10 +1,41 @@
 import React from 'react';
 import {
   View,
-  Text
+  ActionSheetIOS
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Toolbar = (props) => {
+type Props = {
+  style: {};
+  onPressLocalStock: () => void;
+  onPressGlobalStock: () => void;
+};
+
+const Toolbar = (props: Props) => {
+  const showActionSheet = () => {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: [
+        'ローカルにストック',
+        'Qiitaにストック',
+        'キャンセル'
+      ],
+      cancelButtonIndex: 2
+    }, (buttonIndex: number) => {
+      switch(buttonIndex) {
+        case 0:
+          props.onPressLocalStock();
+          break;
+
+        case 1:
+          props.onPressGlobalStock();
+          break;
+
+        default:
+          break;
+      }
+    });
+  };
+
   return (
     <View style={Object.assign({}, {
       width: '100%',
@@ -13,7 +44,20 @@ const Toolbar = (props) => {
       backgroundColor: '#ff0',
       position: 'absolute'
     }, props.style)}>
-      <Text>toolbar</Text>
+      <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        marginTop: -20
+      }}>
+        <Icon
+          name="star"
+          color="#f1ea47"
+          size={50}
+          onPress={showActionSheet}
+        />
+      </View>
     </View>
   );
 };
