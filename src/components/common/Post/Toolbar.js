@@ -10,7 +10,7 @@ type Props = {
   postStatus: {
     isStockedLocal: boolean;
     isStockedGlobal: boolean;
-  }
+  };
   onPressLocalStock: () => void;
   onPressGlobalStock: () => void;
 };

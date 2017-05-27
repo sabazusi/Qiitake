@@ -96,4 +96,16 @@ export default class ApiClient {
       .then((res) => res.json());
   }
 
+  isStockedPost(id: string) {
+    return this._fetch(`/api/v2/items/${id}/stock`)
+      .then((res) => res.json());
+  }
+
+  updateStockingStatus(id: string, isStocking: boolean) {
+    return this._fetch(`/api/v2/items/${id}/stock`, {
+      method: isStocking ? 'PUT' : 'DELETE'
+    })
+      .then((res) => res.json());
+  }
+
 }
