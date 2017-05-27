@@ -7,6 +7,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Props = {
   style: {};
+  postStatus: {
+    isStockedLocal: boolean;
+    isStockedGlobal: boolean;
+  }
   onPressLocalStock: () => void;
   onPressGlobalStock: () => void;
 };
@@ -15,8 +19,8 @@ const Toolbar = (props: Props) => {
   const showActionSheet = () => {
     ActionSheetIOS.showActionSheetWithOptions({
       options: [
-        'ローカルにストック',
-        'Qiitaにストック',
+        isStockedLocal ? 'ローカルのストックから削除' : 'ローカルにストック',
+        isStockedGlobal ? 'Qiitaのストックから削除' : 'Qiitaにストック',
         'キャンセル'
       ],
       cancelButtonIndex: 2
