@@ -52,9 +52,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 
-# flowtype      
-flow-typed      
+# flowtype
+flow-typed
 
-# others      
+# others
 .env
 jsconfig.json
