@@ -73,4 +73,7 @@ export default class Storage {
     })
   }
 
+  updateStockingStatus(id: string, title: string, isStocking: false) {
+  }
+
 }
