@@ -36,6 +36,7 @@ class SearchResult extends React.Component {
         marginBottom: 50
       }}>
         <LoadablePostList
+          apiClient={this.props.apiClient}
           onFetch={this.onFetchPosts}
           navigator={this.props.navigator}
         />

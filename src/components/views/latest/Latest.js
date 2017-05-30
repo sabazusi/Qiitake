@@ -44,6 +44,7 @@ class LatestList extends React.Component<void, Props, State> {
       }}>
         <Spinner visible={!hasInitialized} />
         <LoadablePostList
+          apiClient={this.props.apiClient}
           onFetch={this.fetchPosts}
           navigator={this.props.navigator}
         />

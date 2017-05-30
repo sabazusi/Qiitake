@@ -13,9 +13,12 @@ import GiftedListView from 'react-native-gifted-listview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Post from '../../common/Post';
 
+import ApiClient from '../../../api/client';
+
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 type Props = {
+  apiClient: ApiClient;
   onFetch: (page: number) => Array<PostData>;
   navigator: {
     push: (state: {}) => void;
@@ -23,8 +26,9 @@ type Props = {
 };
 
 type PostData = {
-  title: string,
-  url: string,
+  title: string;
+  url: string;
+  id: string;
 };
 
 class LoadingIcon extends React.Component {
@@ -106,7 +110,11 @@ export default class LoadablePostList extends React.Component<void, Props, void>
             title: data.title,
             component: Post,
             passProps: {
-              url: data.url
+              id: data.id,
+              title: data.title,
+              url: data.url,
+              apiClient: this.props.apiClient,
+              isStockedLocal: false // debug
             }
           })
         }}

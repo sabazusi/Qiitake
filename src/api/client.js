@@ -25,7 +25,7 @@ export default class ApiClient {
   }
 
   getAuthPageUrl(loginStateCode: string) {
-    return `${QIITA_URL}/api/v2/oauth/authorize?client_id=${QIITAKE_CLIENT_ID}&scope=read_qiita&state=${loginStateCode}`;
+    return `${QIITA_URL}/api/v2/oauth/authorize?client_id=${QIITAKE_CLIENT_ID}&scope=read_qiita+write_qiita&state=${loginStateCode}`;
   }
 
   getAuthenticationStatusFromAuthUrl(url: string) {
@@ -103,9 +103,13 @@ export default class ApiClient {
 
   updateStockingStatus(id: string, isStocking: boolean) {
     return this._fetch(`/api/v2/items/${id}/stock`, {
-      method: isStocking ? 'PUT' : 'DELETE'
+      method: isStocking ? 'PUT' : 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: ''
     })
       .then((res) => res.json());
   }
-
 }

@@ -17,6 +17,10 @@ type Props = {
 
 const Toolbar = (props: Props) => {
   const showActionSheet = () => {
+    const {
+      isStockedLocal,
+      isStockedGlobal
+    } = props.postStatus;
     ActionSheetIOS.showActionSheetWithOptions({
       options: [
         isStockedLocal ? 'ローカルのストックから削除' : 'ローカルにストック',
