@@ -110,6 +110,9 @@ export default class ApiClient {
       },
       body: ''
     })
-      .then((res) => res.json());
+      .then((res) => {
+        if (res.status === 204) return true;
+        throw new Error('');
+      });
   }
 }
