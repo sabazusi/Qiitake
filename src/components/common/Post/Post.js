@@ -52,6 +52,15 @@ export default class PostItem extends React.Component<void, Props, State> {
       .catch(() => alert('Failed to Stocking to Qiita'));
   };
 
+  componentDidMount() {
+    const {
+      id,
+      apiClient
+    } = this.props;
+    apiClient.isStockedPost(id)
+      .then((isStocked) => this.setState({ isStockedGlobal: isStocked }));
+  }
+
   render() {
     const {
       url,

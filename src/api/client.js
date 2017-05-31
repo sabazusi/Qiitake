@@ -98,7 +98,7 @@ export default class ApiClient {
 
   isStockedPost(id: string) {
     return this._fetch(`/api/v2/items/${id}/stock`)
-      .then((res) => res.json());
+      .then((res) => res.status === 204);
   }
 
   updateStockingStatus(id: string, isStocking: boolean) {
