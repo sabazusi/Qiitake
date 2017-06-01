@@ -56,6 +56,17 @@ class SearchContainer extends React.Component<void, Props, void> {
     };
   }
 
+  onChangeStore = (store: {}) => {
+    console.log(store);
+  };
+
+  componentDidMount() {
+    const {
+      storage
+    } = this.props;
+    storage.addChangeHandler(this.onChangeStore);
+  }
+
   pushToSearch(value) {
     if (!value) return;
     const {

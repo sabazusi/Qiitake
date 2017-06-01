@@ -13,10 +13,21 @@ export const StorageKeys = {
   LOCAL_STOCK: '@Qiitake:favs:local'
 };
 
+type Handler = (stores: {}) => void;
+
 export default class Storage {
-  constructor(onChangeHandler: (stores: {}) => void) {
+  handlers: Array<Handler> = [];
+  constructor(onChangeHandler: Handler) {
     this.stores = {};
-    this.handler = onChangeHandler;
+    this.handlers.push(onChangeHandler);
+  }
+
+  addChangeHandler(handler: Handler) {
+    this.handlers.push(handler);
+  }
+
+  executeHandlers() {
+    this.handlers.forEach((handler) => handler(this.stores));
   }
 
   load() {
@@ -24,7 +35,7 @@ export default class Storage {
       AsyncStorage.getAllKeys((error, keys) => {
         AsyncStorage.multiGet(keys, (error, stores) => {
           stores.forEach((store) => this.stores[store[0]] = JSON.parse(store[1]));
-          this.handler(this.stores);
+          this.executeHandlers();
           resolve();
         });
       })
@@ -67,7 +78,7 @@ export default class Storage {
       AsyncStorage.setItem(StorageKeys.SEARCH_HISTORY, JSON.stringify(next), (error) => {
         if (error) reject();
         this.stores[StorageKeys.SEARCH_HISTORY] = next;
-        this.handler(this.stores);
+        this.executeHandlers();
         resolve();
       })
     })
