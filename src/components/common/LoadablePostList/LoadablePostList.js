@@ -25,6 +25,10 @@ type Props = {
   };
 };
 
+type State = {
+  isLoadable: boolean;
+};
+
 type PostData = {
   title: string;
   url: string;
@@ -64,14 +68,18 @@ class LoadingIcon extends React.Component {
   }
 }
 
-export default class LoadablePostList extends React.Component<void, Props, void> {
+export default class LoadablePostList extends React.Component<void, Props, State> {
   listRef: HTMLElement;
 
   constructor() {
     super();
+    this.state = {
+      isLoadable: true
+    };
   }
 
   fetchPosts = (page: number = 1, callback: (data: *) => void, options: {}) => {
+    if (!this.state.isLoadable) return;
     this.props.onFetch(page)
       .then((posts) => {
         if (page === 1) {
@@ -80,7 +88,11 @@ export default class LoadablePostList extends React.Component<void, Props, void>
           const current = this.listRef._getRows();
           const loading = current.pop();
           this.listRef._setRows(current);
-          posts.push(loading);
+          if (posts.length > 0) {
+            posts.push(loading);
+          } else {
+            this.setState({ isLoadable: false });
+          }
         }
         callback(posts);
       })
