@@ -13,28 +13,28 @@ export const StorageKeys = {
   LOCAL_STOCK: '@Qiitake:favs:local'
 };
 
-type Handler = (stores: {}) => void;
+type Handler = (store: {}) => void;
 
 export default class Storage {
   handlers: Array<Handler> = [];
   constructor() {
-    this.stores = {};
+    this.store = {};
   }
 
   addChangeHandler(handler: Handler) {
     this.handlers.push(handler);
-    return new Promise((resolve) => resolve(this.stores));
+    return new Promise((resolve) => resolve(this.store));
   }
 
   executeHandlers() {
-    this.handlers.forEach((handler) => handler(this.stores));
+    this.handlers.forEach((handler) => handler(this.store));
   }
 
   load() {
     return new Promise((resolve, reject) => {
       AsyncStorage.getAllKeys((error, keys) => {
-        AsyncStorage.multiGet(keys, (error, stores) => {
-          stores.forEach((store) => this.stores[store[0]] = JSON.parse(store[1]));
+        AsyncStorage.multiGet(keys, (error, store) => {
+          store.forEach((store) => this.store[store[0]] = JSON.parse(store[1]));
           this.executeHandlers();
           resolve();
         });
@@ -43,7 +43,7 @@ export default class Storage {
   }
 
   getAccessToken() {
-    return this.stores[StorageKeys.ACCESS_TOKEN] || null;
+    return this.store[StorageKeys.ACCESS_TOKEN] || null;
   }
 
   updateAccessToken(accessToken: string) {
@@ -59,14 +59,14 @@ export default class Storage {
     return new Promise((resolve,reject) => {
       AsyncStorage.removeItem(StorageKeys.ACCESS_TOKEN, (error) => {
         if (error) reject();
-        this.stores[StorageKeys.ACCESS_TOKEN] = null;
+        this.store[StorageKeys.ACCESS_TOKEN] = null;
         resolve();
       });
     });
   }
 
   addSearchHistory(word: string) {
-    const current = this.stores[StorageKeys.SEARCH_HISTORY] || [];
+    const current = this.store[StorageKeys.SEARCH_HISTORY] || [];
     let next;
     if (current.indexOf(word) > -1) {
       next = [word].concat(current.filter((exist) => exist !== word));
@@ -77,7 +77,7 @@ export default class Storage {
     return new Promise((resolve, reject) => {
       AsyncStorage.setItem(StorageKeys.SEARCH_HISTORY, JSON.stringify(next), (error) => {
         if (error) reject();
-        this.stores[StorageKeys.SEARCH_HISTORY] = next;
+        this.store[StorageKeys.SEARCH_HISTORY] = next;
         this.executeHandlers();
         resolve();
       })
