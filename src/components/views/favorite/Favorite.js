@@ -9,19 +9,19 @@ import {
   NavigatorIOS
 } from 'react-native';
 
-export default class Favorite extends React.Component {
-  render() {
-    return (
-      <NavigatorIOS
-        style={{flex: 1}}
-        initialRoute={{
-          title: 'お気に入り投稿',
-          component: FavoriteContainer
-        }}
-      />
-    )
-  }
+const Favorite = (props) => {
+  return (
+    <NavigatorIOS
+      style={{flex: 1}}
+      initialRoute={{
+        title: 'お気に入り投稿',
+        component: FavoriteContainer,
+        passProps: { ...props }
+      }}
+    />
+  )
 }
+export default Favorite;
 
 class FavoriteContainer extends React.Component {
   constructor() {
@@ -46,6 +46,18 @@ class FavoriteContainer extends React.Component {
       }
     }
   }
+
+  componentDidMount() {
+    const {
+      user,
+      apiClient
+    } = this.props;
+    if (user && user.id) {
+      apiClient.getStocks(user.id)
+        .then(res => console.log(res));
+    }
+  }
+
   render() {
     const {
       optionIndex,

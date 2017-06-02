@@ -115,4 +115,9 @@ export default class ApiClient {
         throw new Error('');
       });
   }
+
+  getStocks(userId: string, page: number = 1) {
+    return this._fetch(`/api/v2/users/${userId}/stocks?page=${page}`)
+      .then((res) => res.json());
+  }
 }

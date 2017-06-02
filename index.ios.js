@@ -134,7 +134,15 @@ export default class Qiitake extends React.Component {
           selected={current === TabTypes.FAVORITE}
           onPress={() => this.setState({current: TabTypes.FAVORITE})}
         >
-          {this.withModal(<Favorite />)}
+          {this.withModal(
+            <Favorite
+              apiClient={this.apiClient}
+              user={user}
+              storage={this.storage}
+              login={this.showLoginModal}
+              logout={this.logout}
+            />
+          )}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="settings"
