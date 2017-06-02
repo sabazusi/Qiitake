@@ -17,13 +17,13 @@ type Handler = (stores: {}) => void;
 
 export default class Storage {
   handlers: Array<Handler> = [];
-  constructor(onChangeHandler: Handler) {
+  constructor() {
     this.stores = {};
-    this.handlers.push(onChangeHandler);
   }
 
   addChangeHandler(handler: Handler) {
     this.handlers.push(handler);
+    return new Promise((resolve) => resolve(this.stores));
   }
 
   executeHandlers() {

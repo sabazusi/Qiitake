@@ -17,7 +17,7 @@ import Settings from './src/components/views/settings';
 import LoginModal from './src/components/common/LoginModal';
 
 import ApiClient from './src/api/client';
-import Storage, { StorageKeys } from './src/utils/storage';
+import Storage from './src/utils/storage';
 
 const TabTypes = {
   LATEST: 'latest',
@@ -32,23 +32,16 @@ export default class Qiitake extends React.Component {
   constructor() {
     super();
 
-    this.storage = new Storage(this.onUpdateStorage);
+    this.storage = new Storage();
     this.apiClient = new ApiClient();
     this.state = {
       isOpenLoginModal: false,
       current: TabTypes.LATEST,
-      dataStore: {},
       user: {
         isProcessing: false
       }
     };
   }
-
-  onUpdateStorage = (changes: {}) => {
-    this.setState({
-      dataStore: Object.assign({}, this.state.dataStore, changes)
-    });
-  };
 
   componentWillMount() {
     this.storage.load()
@@ -104,14 +97,9 @@ export default class Qiitake extends React.Component {
 
   render() {
     const {
-      dataStore,
       current,
       user
     } = this.state;
-    const searchCandidates = {
-      fav: dataStore[StorageKeys.SEARCH_FAV] || [],
-      history: dataStore[StorageKeys.SEARCH_HISTORY] || []
-    };
 
     return (
       <TabBarIOS
@@ -137,7 +125,6 @@ export default class Qiitake extends React.Component {
             <Search
               apiClient={this.apiClient}
               storage={this.storage}
-              candidates={searchCandidates}
             />
           )}
         </Icon.TabBarItemIOS>

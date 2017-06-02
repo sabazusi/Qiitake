@@ -11,6 +11,7 @@ import {
   TouchableHighlight,
   SegmentedControlIOS
 } from 'react-native';
+import { StorageKeys } from '../../../utils/storage';
 import LoadablePostList from '../../common/LoadablePostList';
 import type Strorage from '../../../utils/storage';
 import type ApiClient from '../../../api/client';
@@ -52,19 +53,29 @@ class SearchContainer extends React.Component<void, Props, void> {
     this.dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       inputValue: '',
-      optionIndex: 0
+      optionIndex: 0,
+      candidates: {
+        'history': [],
+        'fav': []
+      }
     };
   }
 
   onChangeStore = (store: {}) => {
-    console.log(store);
+    this.setState({
+      candidates: {
+        history: store[StorageKeys.SEARCH_HISTORY] || [],
+        fav: store[StorageKeys.SEARCH_FAV] || []
+      }
+    });
   };
 
   componentDidMount() {
     const {
       storage
     } = this.props;
-    storage.addChangeHandler(this.onChangeStore);
+    storage.addChangeHandler(this.onChangeStore)
+      .then((store) => this.onChangeStore(store));
   }
 
   pushToSearch(value) {
@@ -102,11 +113,10 @@ class SearchContainer extends React.Component<void, Props, void> {
   render() {
     const {
       inputValue,
-      optionIndex
-    } = this.state;
-    const {
+      optionIndex,
       candidates
-    } = this.props;
+    } = this.state;
+
     const targetCandidates = candidates[optionIndex === 0 ? 'history' : 'fav'];
 
     return (
