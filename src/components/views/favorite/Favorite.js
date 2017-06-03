@@ -55,16 +55,31 @@ class FavoriteContainer extends React.Component {
     }
   };
 
-  render() {
-    const {
-      optionIndex
-    } = this.state;
+  getCurrentList = () => {
     const {
       apiClient,
       navigator,
       user
     } = this.props;
+    const { optionIndex } = this.state;
+    if (optionIndex === 0) {
+      return user && user.id ? (
+        <LoadablePostList
+          apiClient={apiClient}
+          onFetch={this.onFetchPosts}
+          navigator={navigator}
+        />
+      ) : null;
+    } else {
+      return null;
+    }
+  };
 
+  render() {
+    const {
+      optionIndex
+    } = this.state;
+    
     return (
       <View style={{
         marginTop: 60,
@@ -88,15 +103,7 @@ class FavoriteContainer extends React.Component {
             height: '80%'
           }}
         >
-          {
-            user && user.id ? (
-              <LoadablePostList
-                apiClient={apiClient}
-                onFetch={this.onFetchPosts}
-                navigator={navigator}
-              />
-            ) : null
-          }
+          { this.getCurrentList() }
         </View>
       </View>
     )
