@@ -86,6 +86,7 @@ export default class LoadablePostList extends React.Component<void, Props, State
           posts.push({ isLoadingDummy: true });
         } else {
           const current = this.listRef._getRows();
+          if (!current[current.length - 1].isLoadingDummy) return;
           const loading = current.pop();
           this.listRef._setRows(current);
           if (posts.length > 0) {
@@ -101,6 +102,7 @@ export default class LoadablePostList extends React.Component<void, Props, State
 
 
   renderRow = (data: PostData) => {
+    if (!data) return null;
     return data.isLoadingDummy ? (
       <View style={{
         flex: 1,

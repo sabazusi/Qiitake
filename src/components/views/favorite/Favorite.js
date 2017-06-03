@@ -8,6 +8,7 @@ import {
   SegmentedControlIOS,
   NavigatorIOS
 } from 'react-native';
+import LoadablePostList from '../../common/LoadablePostList';
 
 const Favorite = (props) => {
   return (
@@ -26,24 +27,8 @@ export default Favorite;
 class FavoriteContainer extends React.Component {
   constructor() {
     super();
-    const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
-      optionIndex: 0,
-      isLoggedIn: false,
-      posts: {
-        local: dataSource.cloneWithRows([
-          'local-save-1',
-          'local-save-2',
-          'local-save-3',
-          'local-save-4',
-          'local-save-5',
-          'local-save-6',
-          'local-save-7'
-        ]),
-        stock: dataSource.cloneWithRows([
-          'stock'
-        ])
-      }
+      optionIndex: 0
     }
   }
 
@@ -58,31 +43,61 @@ class FavoriteContainer extends React.Component {
     }
   }
 
+  onFetchPosts = (page: number) => {
+    const {
+      user,
+      apiClient
+    } = this.props;
+    if (user && user.id) {
+      return apiClient.getStocks(user.id, page);
+    } else {
+      return Promise.resolve([]);
+    }
+  };
+
   render() {
     const {
-      optionIndex,
-      posts
+      optionIndex
     } = this.state;
+    const {
+      apiClient,
+      navigator,
+      user
+    } = this.props;
 
     return (
       <View style={{
-        flexDirection: 'column',
-        alignItems: 'center'
+        marginTop: 60,
       }}>
-        <SegmentedControlIOS
+        <View style={{
+          flex: 1,
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}>
+          <SegmentedControlIOS
+            style={{
+              width: '90%',
+            }}
+            values={['ストック', 'この端末']}
+            selectedIndex={optionIndex}
+            onChange={(event) => this.setState({optionIndex: event.nativeEvent.selectedSegmentIndex})}
+          />
+        </View>
+        <View
           style={{
-            width: '90%',
-            marginTop: 50
+            height: '80%'
           }}
-          values={['この端末', 'ストック']}
-          selectedIndex={optionIndex}
-          onChange={(event) => this.setState({optionIndex: event.nativeEvent.selectedSegmentIndex})}
-        />
-        <ListView
-          style={{height: '100%'}}
-          dataSource={optionIndex === 0 ? posts.local : posts.stock}
-          renderRow={(data) => (<Text>{data}</Text>)}
-        />
+        >
+          {
+            user && user.id ? (
+              <LoadablePostList
+                apiClient={apiClient}
+                onFetch={this.onFetchPosts}
+                navigator={navigator}
+              />
+            ) : null
+          }
+        </View>
       </View>
     )
   }
