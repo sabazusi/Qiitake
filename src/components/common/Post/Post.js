@@ -38,7 +38,7 @@ export default class PostItem extends React.Component<void, Props, State> {
     } = this.props;
 
     storage.updateStockingStatus(id, title, !isStockedLocal)
-      .catch(() => alert('Failed to update stocking status in local'));
+      .catch(() => alert('ローカルへの記事の保存に失敗しました'));
   };
 
   onPressGlobalStock = () => {
@@ -49,7 +49,7 @@ export default class PostItem extends React.Component<void, Props, State> {
     const { isStockedGlobal } = this.state;
     apiClient.updateStockingStatus(id, !isStockedGlobal)
       .then(() => this.setState({ isStockedGlobal: !isStockedGlobal }))
-      .catch(() => alert('Failed to Stocking to Qiita'));
+      .catch(() => alert('ストックの更新に失敗しました'));
   };
 
   componentDidMount() {
