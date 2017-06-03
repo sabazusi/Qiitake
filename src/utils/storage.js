@@ -7,8 +7,6 @@ export const StorageKeys = {
   ACCESS_TOKEN: '@Qiitake:user:token',
   // @array<string>
   SEARCH_HISTORY: '@Qiitake:search:history',
-  // @array<string>
-  SEARCH_FAV: '@Qiitake:search:fav',
   // @array<{id: string, title: string, user: {name: string, image_url: string}}}>
   LOCAL_STOCK: '@Qiitake:favs:local'
 };

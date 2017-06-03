@@ -8,8 +8,7 @@ import {
   View,
   ListView,
   NavigatorIOS,
-  TouchableHighlight,
-  SegmentedControlIOS
+  TouchableHighlight
 } from 'react-native';
 import { StorageKeys } from '../../../utils/storage';
 import LoadablePostList from '../../common/LoadablePostList';
@@ -53,20 +52,13 @@ class SearchContainer extends React.Component<void, Props, void> {
     this.dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       inputValue: '',
-      optionIndex: 0,
-      candidates: {
-        'history': [],
-        'fav': []
-      }
+      candidates: []
     };
   }
 
   onChangeStore = (store: {}) => {
     this.setState({
-      candidates: {
-        history: store[StorageKeys.SEARCH_HISTORY] || [],
-        fav: store[StorageKeys.SEARCH_FAV] || []
-      }
+      candidates: store[StorageKeys.SEARCH_HISTORY] || []
     });
   };
 
@@ -113,11 +105,8 @@ class SearchContainer extends React.Component<void, Props, void> {
   render() {
     const {
       inputValue,
-      optionIndex,
       candidates
     } = this.state;
-
-    const targetCandidates = candidates[optionIndex === 0 ? 'history' : 'fav'];
 
     return (
       <View style={{
@@ -145,20 +134,11 @@ class SearchContainer extends React.Component<void, Props, void> {
             onSubmitEditing={() => this.pushToSearch(this.state.inputValue)}
           />
         </View>
-        <SegmentedControlIOS
-          style={{
-            width: '90%',
-            marginTop: 30
-          }}
-          values={['検索履歴', 'お気に入り']}
-          selectedIndex={optionIndex}
-          onChange={(event) => this.setState({optionIndex: event.nativeEvent.selectedSegmentIndex})}
-        />
         <View style={{width: '90%', height: '80%'}}>
           {
-            targetCandidates.length > 0 ? (
+            candidates.length > 0 ? (
               <ListView
-                dataSource={this.dataSource.cloneWithRows(targetCandidates)}
+                dataSource={this.dataSource.cloneWithRows(candidates)}
                 renderRow={(data) => (
                   <TouchableHighlight
                     underlayColor="#fff"
