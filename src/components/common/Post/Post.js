@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toolbar from './Toolbar';
-import type Storage from '../../../utils/storage';
 import type ApiClient from '../../../api/client';
 
 type Props = {
@@ -13,42 +12,28 @@ type Props = {
   title: string,
   url: string;
   apiClient: ApiClient;
-  isStockedLocal: boolean;
-  storage: Storage;
 };
 
 type State = {
-  isStockedGlobal: boolean;
+  isStocked: boolean;
 };
 
 export default class PostItem extends React.Component<void, Props, State> {
   constructor() {
     super();
     this.state = {
-      isStockedGlobal: false
+      isStocked: false
     };
   }
 
-  onPressLocalStock = () => {
-    const {
-      id,
-      title,
-      storage,
-      isStockedLocal
-    } = this.props;
-
-    storage.updateStockingStatus(id, title, !isStockedLocal)
-      .catch(() => alert('ローカルへの記事の保存に失敗しました'));
-  };
-
-  onPressGlobalStock = () => {
+  onPressStocking = () => {
     const {
       id,
       apiClient
     } = this.props;
-    const { isStockedGlobal } = this.state;
-    apiClient.updateStockingStatus(id, !isStockedGlobal)
-      .then(() => this.setState({ isStockedGlobal: !isStockedGlobal }))
+    const { isStocked } = this.state;
+    apiClient.updateStockingStatus(id, !isStocked)
+      .then(() => this.setState({ isStocked: !isStocked }))
       .catch(() => alert('ストックの更新に失敗しました'));
   };
 
@@ -58,16 +43,12 @@ export default class PostItem extends React.Component<void, Props, State> {
       apiClient
     } = this.props;
     apiClient.isStockedPost(id)
-      .then((isStocked) => this.setState({ isStockedGlobal: isStocked }));
+      .then((isStocked) => this.setState({ isStocked }));
   }
 
   render() {
-    const {
-      url,
-      isStockedLocal
-    } = this.props;
-
-    const { isStockedGlobal } = this.state;
+    const { url } = this.props;
+    const { isStocked } = this.state;
 
     return url ? (
       <View style={{flex: 1}}>
@@ -76,12 +57,8 @@ export default class PostItem extends React.Component<void, Props, State> {
           style={{
             backgroundColor: '#42c693'
           }}
-          postStatus={{
-            isStockedLocal,
-            isStockedGlobal
-          }}
-          onPressLocalStock={this.onPressLocalStock}
-          onPressGlobalStock={this.onPressGlobalStock}
+          isStocked={isStocked}
+          onPressStocking={this.onPressStocking}
         />
       </View>
     ) : (

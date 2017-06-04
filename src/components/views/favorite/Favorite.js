@@ -27,9 +27,6 @@ export default Favorite;
 class FavoriteContainer extends React.Component {
   constructor() {
     super();
-    this.state = {
-      optionIndex: 0
-    }
   }
 
   componentDidMount() {
@@ -61,43 +58,20 @@ class FavoriteContainer extends React.Component {
       navigator,
       user
     } = this.props;
-    const { optionIndex } = this.state;
-    if (optionIndex === 0) {
-      return user && user.id ? (
-        <LoadablePostList
-          apiClient={apiClient}
-          onFetch={this.onFetchPosts}
-          navigator={navigator}
-        />
-      ) : null;
-    } else {
-      return null;
-    }
+    return user && user.id ? (
+      <LoadablePostList
+        apiClient={apiClient}
+        onFetch={this.onFetchPosts}
+        navigator={navigator}
+      />
+    ) : null;
   };
 
   render() {
-    const {
-      optionIndex
-    } = this.state;
-    
     return (
       <View style={{
         marginTop: 60,
       }}>
-        <View style={{
-          flex: 1,
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}>
-          <SegmentedControlIOS
-            style={{
-              width: '90%',
-            }}
-            values={['ストック', 'この端末']}
-            selectedIndex={optionIndex}
-            onChange={(event) => this.setState({optionIndex: event.nativeEvent.selectedSegmentIndex})}
-          />
-        </View>
         <View
           style={{
             height: '80%'

@@ -127,8 +127,7 @@ export default class LoadablePostList extends React.Component<void, Props, State
               id: data.id,
               title: data.title,
               url: data.url,
-              apiClient: this.props.apiClient,
-              isStockedLocal: false // debug
+              apiClient: this.props.apiClient
             }
           })
         }}
