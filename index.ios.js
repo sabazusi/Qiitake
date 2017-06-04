@@ -108,7 +108,7 @@ export default class Qiitake extends React.Component {
         style={styles.container}
       >
         <Icon.TabBarItemIOS
-          title="latest"
+          title="new"
           iconName="group"
           selected={current === TabTypes.LATEST}
           onPress={() => this.setState({current: TabTypes.LATEST})}
@@ -116,7 +116,7 @@ export default class Qiitake extends React.Component {
           {this.withModal(<Latest apiClient={this.apiClient} />)}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
-          title="search"
+          title="stock"
           iconName="search"
           selected={current === TabTypes.SEARCH}
           onPress={() => this.setState({current: TabTypes.SEARCH})}
@@ -129,7 +129,7 @@ export default class Qiitake extends React.Component {
           )}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
-          title="favorite"
+          title="user"
           iconName="star"
           selected={current === TabTypes.FAVORITE}
           onPress={() => this.setState({current: TabTypes.FAVORITE})}

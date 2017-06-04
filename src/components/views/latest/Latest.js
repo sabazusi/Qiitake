@@ -58,7 +58,7 @@ const Latest = (props: Props) => {
     <NavigatorIOS
       style={{flex: 1}}
       initialRoute={{
-        title: '話題の投稿',
+        title: '最新の投稿',
         component: LatestList,
         passProps: {
           apiClient: props.apiClient
