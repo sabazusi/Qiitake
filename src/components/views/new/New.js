@@ -15,7 +15,7 @@ type State = {
   hasInitialized: boolean;
 }
 
-class LatestList extends React.Component<void, Props, State> {
+class NewList extends React.Component<void, Props, State> {
   constructor() {
     super();
     this.state = {
@@ -24,7 +24,7 @@ class LatestList extends React.Component<void, Props, State> {
   }
 
   fetchPosts = (page: number = 1) => {
-    return this.props.apiClient.getLatestPosts(page)
+    return this.props.apiClient.getNewPosts(page)
       .then((posts) => {
         this.setState({ hasInitialized: true });
         return posts;
@@ -53,13 +53,13 @@ class LatestList extends React.Component<void, Props, State> {
   }
 }
 
-const Latest = (props: Props) => {
+const New = (props: Props) => {
   return (
     <NavigatorIOS
       style={{flex: 1}}
       initialRoute={{
         title: '最新の投稿',
-        component: LatestList,
+        component: NewList,
         passProps: {
           apiClient: props.apiClient
         }
@@ -68,4 +68,4 @@ const Latest = (props: Props) => {
   );
 }
 
-export default Latest;
+export default New;

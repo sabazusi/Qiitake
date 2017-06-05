@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Latest from './src/components/views/latest';
+import New from './src/components/views/new';
 import Search from './src/components/views/search';
-import Favorite from './src/components/views/favorite';
-import Settings from './src/components/views/settings';
+import Stock from './src/components/views/stock';
+import User from './src/components/views/user';
 
 import LoginModal from './src/components/common/LoginModal';
 
@@ -19,10 +19,10 @@ import ApiClient from './src/api/client';
 import Storage from './src/utils/storage';
 
 const TabTypes = {
-  LATEST: 'latest',
+  NEW: 'new',
   SEARCH: 'search',
-  FAVORITE: 'favorite',
-  SETTINGS: 'settings'
+  STOCK: 'stock',
+  USER: 'user'
 };
 
 export default class Qiitake extends React.Component {
@@ -35,7 +35,7 @@ export default class Qiitake extends React.Component {
     this.apiClient = new ApiClient();
     this.state = {
       isOpenLoginModal: false,
-      current: TabTypes.LATEST,
+      current: TabTypes.NEW,
       user: {
         isProcessing: false
       }
@@ -109,10 +109,10 @@ export default class Qiitake extends React.Component {
         <Icon.TabBarItemIOS
           title="new"
           iconName="group"
-          selected={current === TabTypes.LATEST}
-          onPress={() => this.setState({current: TabTypes.LATEST})}
+          selected={current === TabTypes.NEW}
+          onPress={() => this.setState({current: TabTypes.NEW})}
         >
-          {this.withModal(<Latest apiClient={this.apiClient} />)}
+          {this.withModal(<New apiClient={this.apiClient} />)}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
           title="search"
@@ -130,11 +130,11 @@ export default class Qiitake extends React.Component {
         <Icon.TabBarItemIOS
           title="stock"
           iconName="star"
-          selected={current === TabTypes.FAVORITE}
-          onPress={() => this.setState({current: TabTypes.FAVORITE})}
+          selected={current === TabTypes.STOCK}
+          onPress={() => this.setState({current: TabTypes.STOCK})}
         >
           {this.withModal(
-            <Favorite
+            <Stock
               apiClient={this.apiClient}
               user={user}
               storage={this.storage}
@@ -146,11 +146,11 @@ export default class Qiitake extends React.Component {
         <Icon.TabBarItemIOS
           title="user"
           iconName="gears"
-          selected={current === TabTypes.SETTINGS}
-          onPress={() => this.setState({current: TabTypes.SETTINGS })}
+          selected={current === TabTypes.USER}
+          onPress={() => this.setState({current: TabTypes.USER })}
         >
           {this.withModal(
-            <Settings
+            <User
               apiClient={this.apiClient}
               user={user}
               storage={this.storage}

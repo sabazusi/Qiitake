@@ -81,7 +81,7 @@ export default class ApiClient {
     }
   }
 
-  getLatestPosts(page: number = 1) {
+  getNewPosts(page: number = 1) {
     return this._fetch(`/api/v2/items?page=${page}`)
       .then((res) => res.json());
   }

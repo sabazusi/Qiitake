@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-const Settings = (props) => {
+const User = (props) => {
   const {
     login,
     logout,
@@ -45,4 +45,4 @@ const Settings = (props) => {
   );
 }
 
-export default Settings;
+export default User;

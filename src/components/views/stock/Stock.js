@@ -10,21 +10,21 @@ import {
 } from 'react-native';
 import LoadablePostList from '../../common/LoadablePostList';
 
-const Favorite = (props) => {
+const Stock = (props) => {
   return (
     <NavigatorIOS
       style={{flex: 1}}
       initialRoute={{
         title: 'お気に入り投稿',
-        component: FavoriteContainer,
+        component: StockContainer,
         passProps: { ...props }
       }}
     />
   )
 }
-export default Favorite;
+export default Stock;
 
-class FavoriteContainer extends React.Component {
+class StockContainer extends React.Component {
   constructor() {
     super();
   }
