@@ -4,7 +4,6 @@ import React from 'react';
 import {
   TabBarIOS,
   AppRegistry,
-  AsyncStorage,
   StyleSheet
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -116,7 +115,7 @@ export default class Qiitake extends React.Component {
           {this.withModal(<Latest apiClient={this.apiClient} />)}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
-          title="stock"
+          title="search"
           iconName="search"
           selected={current === TabTypes.SEARCH}
           onPress={() => this.setState({current: TabTypes.SEARCH})}
@@ -129,7 +128,7 @@ export default class Qiitake extends React.Component {
           )}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
-          title="user"
+          title="stock"
           iconName="star"
           selected={current === TabTypes.FAVORITE}
           onPress={() => this.setState({current: TabTypes.FAVORITE})}
@@ -145,7 +144,7 @@ export default class Qiitake extends React.Component {
           )}
         </Icon.TabBarItemIOS>
         <Icon.TabBarItemIOS
-          title="settings"
+          title="user"
           iconName="gears"
           selected={current === TabTypes.SETTINGS}
           onPress={() => this.setState({current: TabTypes.SETTINGS })}
